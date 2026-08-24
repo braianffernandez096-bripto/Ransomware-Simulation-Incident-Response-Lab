@@ -81,7 +81,3 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 | 18-T1486-rule100200-description-mitree.png | T1486 | Alta |
 
 **Total: 18 capturas — 17 Alta, 1 Media**
-
-> Nota: Los números en los nombres de archivo no son consecutivos (faltan 04, 06, 09, 11, etc.)
-> porque esas imágenes fueron eliminadas por redundancia de información.
-> Los números que quedan son los originales asignados en la sesión de captura.
