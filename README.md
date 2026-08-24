@@ -3,6 +3,24 @@
 > **Entorno educativo de simulación de ataque de ransomware con detección en Wazuh SIEM, respuesta a incidentes y recuperación completa.**
 
 ---
+
+## Descripción General
+
+Este laboratorio simula una cadena de ataque completa de ransomware en un entorno controlado, cubriendo desde la fase de preparación del atacante (destrucción de backups y shadow copies) hasta el cifrado de archivos, su detección por un SIEM, la respuesta al incidente y la recuperación final.
+
+El objetivo es demostrar capacidades de **detección, análisis y respuesta** propias de un analista SOC:
+
+- Simulación técnica de comportamiento de ransomware real (WannaCry, Olympic Destroyer, LockBit)
+- Detección via telemetría de Sysmon correlacionada en Wazuh
+- Creación de reglas custom mapeadas a MITRE ATT&CK
+- Identificación de gaps de cobertura en la configuración del agente
+- Proceso completo de respuesta a incidentes alineado a ISO/IEC 27001:2022
+- Reporte ejecutivo documentando el ciclo completo
+
+> ⚠️ **Proyecto educativo. Todos los scripts y técnicas se ejecutaron en un entorno aislado sin acceso a redes de producción.**
+
+---
+
 ## Tecnologías
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
@@ -12,9 +30,9 @@
 ![Docker](https://img.shields.io/badge/Docker-Single--Node-blue?logo=docker)
 
 ---
+
 ## 📋 Tabla de Contenidos
 
-- [Descripción General](#descripción-general)
 - [Infraestructura](#infraestructura)
 - [Cadena de Ataque — MITRE ATT&CK](#cadena-de-ataque--mitre-attck)
 - [Fase 1 — Pre-cifrado](#fase-1--pre-cifrado)
@@ -28,40 +46,24 @@
 
 ---
 
-## Descripción General
-
-Este laboratorio simula una cadena de ataque completa de ransomware en un entorno controlado, cubriendo desde la fase de preparación del atacante (destrucción de backups y shadow copies) hasta el cifrado de archivos, su detección por un SIEM, la respuesta al incidente y la recuperación final.
-
-El objetivo es demostrar capacidades de **detección, análisis y respuesta** propias de un analista SOC:
-
-- Simulación técnica de comportamiento de ransomware real (WannaCry, Olympic Destroyer, LockBit)
-- Detección via telemetría de Sysmon correlacionada en Wazuh
-- Creación de reglas custom mapeadas a MITRE ATT&CK
-- Identificación de gaps de cobertura en la configuración del agente
-- Proceso completo de respuesta a incidentes y recuperación
-- Reporte ejecutivo documentando el ciclo completo
-
-> ⚠️ **Proyecto educativo. Todos los scripts y técnicas se ejecutaron en un entorno aislado sin acceso a redes de producción.**
-
----
-
 ## Infraestructura
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │                         RED INTERNA (NAT)                            │
 │                                                                      │
-│  ┌─────────────────────┐         ┌──────────────────────────────┐    │
-│  │  Windows 10 Pro     │         │      Ubuntu 22.04 LTS        │    │
-│  │  (VÍCTIMA)          │ ──────▶│       (ANÁLISIS)             │    │
-│  │                     │         │                              │    │
-│  │ • Sysmon 15.21      │         │ • Wazuh Manager 4.14.7       │    │
-│  │ • Wazuh Agent       │         │ • Wazuh Indexer 4.14.7       │    │
-│  │ • Python 3.12       │         │ • Wazuh Dashboard 4.14.7     │    │
-│  │ • Atomic Red Team   │         │   (Stack en Docker)          │    │
-│  │                     │         │                              │    │
-│  │ IP: 192.168.64.135  │         │ IP: 192.168.64.130           │    │
-│  └─────────────────────┘         └──────────────────────────────┘    │
+│  ┌──────────────────────┐              ┌──────────────────────────┐  │
+│  │   Windows 10 Pro     │              │    Ubuntu 22.04 LTS      │  │
+│  │     (VÍCTIMA)        │              │      (ANÁLISIS)          │  │
+│  │                      │              │                          │  │
+│  │  • Sysmon 15.21      │              │  • Wazuh Manager 4.14.7  │  │
+│  │  • Wazuh Agent       ├─────────────▶│  • Wazuh Indexer 4.14.7  │  │
+│  │  • Python 3.12       │              │  • Wazuh Dashboard 4.14.7│  │
+│  │  • Atomic Red Team   │              │    (Stack en Docker)     │  │
+│  │                      │              │                          │  │
+│  ├──────────────────────┤              ├──────────────────────────┤  │
+│  │  IP: 192.168.64.135  │              │  IP: 192.168.64.130      │  │
+│  └──────────────────────┘              └──────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -125,9 +127,11 @@ powershell.exe
        └─ sc.exe stop spooler
 ```
 
+![T1489 sc.exe commandLine detalle](evidence/screenshots/01-T1489-sc-cmdline-detalle.png)
+
 ![T1489 cadena de proceso en Wazuh](evidence/screenshots/02-T1489-cadena-proceso-wazuh.png)
 
-![T1489 rule 92052 alerta](evidence/screenshots/03-T1489-rule92032-alerta.png)
+![T1489 rule 92032 alerta](evidence/screenshots/03-T1489-rule92032-alerta.png)
 
 > **Gap documentado:** El Event ID 7036 (Service Control Manager) no llegó a Wazuh porque el canal `System` no está configurado en el agente. La telemetría de Sysmon (EID 1) capturó la ejecución; el efecto fue confirmado directamente en el endpoint (`Status: Stopped`).
 
@@ -136,6 +140,7 @@ powershell.exe
 ### T1490 — Inhibit System Recovery
 
 **T1490-1 — Delete Volume Shadow Copies:**
+
 ```powershell
 Invoke-AtomicTest T1490-1
 # vssadmin.exe delete shadows /all /quiet
@@ -145,13 +150,20 @@ Invoke-AtomicTest T1490-1
 
 ![T1490 vssadmin cadena padre](evidence/screenshots/05-T1490-vssadmin-cadena-padre.png)
 
+![T1490 vssadmin rule 92052 mitre](evidence/screenshots/06-T1490-vssadmin-rule-mitre.png)
+
 **T1490-3 — Delete Backup Catalog:**
+
 ```powershell
 Invoke-AtomicTest T1490-3
 # wbadmin delete catalog -quiet
 ```
 
 ![T1490 wbadmin commandLine en Wazuh](evidence/screenshots/11-T1490-wbadmin-cmdline-wazuh.png)
+
+![T1490 wbadmin cadena padre](evidence/screenshots/12-T1490-wbadmin-cadena-padre.png)
+
+![T1490 wbadmin rule 92052 mitre](evidence/screenshots/13-T1490-wbadmin-rule92052-mitre.png)
 
 > **Hallazgo:** Las tres técnicas de T1489/T1490 fueron detectadas por reglas genéricas de shell (92032/92052), no por reglas específicas de la táctica. Ver sección [Gaps de Cobertura](#hallazgos-y-gaps-de-cobertura).
 
@@ -247,9 +259,9 @@ if __name__ == "__main__":
 
 ![Ejecución Python encrypt output](evidence/screenshots/07-T1486-ejecucion-python-encrypt.png)
 
-![Archivos cifrados y nota de rescate](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
+![Nota de rescate README_RECOVER.txt](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
 
-![Nota de rescate README_RECOVER.txt](evidence/screenshots/09-T1486-archivos-locked-finanzas.png)
+![Archivos cifrados .locked en carpeta Finanzas](evidence/screenshots/09-T1486-archivos-locked-finanzas.png)
 
 ---
 
@@ -286,9 +298,13 @@ rule.id: 100200 OR rule.id: 100210
 
 ![Vista general 13 hits T1486 en Wazuh](evidence/screenshots/10-T1486-13hits-overview-wazuh.png)
 
+![Rule 100210 FileDelete metadata hashes](evidence/screenshots/16-T1486-rule100210-metadata-hashes.png)
+
+![Rule 100210 groups impact mitre](evidence/screenshots/17-T1486-rule100210-groups-impact.png)
+
 ![Rule 100200 FileCreate .locked detail](evidence/screenshots/18-T1486-rule100200-filecreate-locked.png)
 
-![Rule 100210 FileDelete python.exe detail](evidence/screenshots/16-T1486-rule100210-metadata-hashes.png)
+![Rule 100200 description mitre T1486](evidence/screenshots/19-T1486-rule100200-description-mitre.png)
 
 | Rule ID | EID Sysmon | Descripción | Level | Tactic | Hits |
 |---|---|---|---|---|---|
@@ -440,6 +456,8 @@ if __name__ == "__main__":
 
 **ID:** INC-2026-0824-001 | **Clasificación:** CONFIDENCIAL | **Estado:** CERRADO
 
+El reporte ejecutivo completo está disponible en `docs/` alineado a **ISO/IEC 27001:2022**, con referencias complementarias a NIST SP 800-61 Rev. 2 y MITRE ATT&CK v14.
+
 ### Resumen
 
 Ataque de ransomware simulado detectado el 24/08/2026 en el endpoint `DESKTOP-60HVTTB` (Vuln-SOC, 192.168.64.135). Cadena completa ejecutada: destrucción de recovery → cifrado de 6 archivos en 3 carpetas → 13 alertas en Wazuh → recuperación total. Sin afectación a infraestructura de producción.
@@ -460,7 +478,7 @@ Ataque de ransomware simulado detectado el 24/08/2026 en el endpoint `DESKTOP-60
 
 | Tipo | Valor | Técnica |
 |---|---|---|
-| Proceso | python.exe (C:\Program Files\Python312\) | T1486 |
+| Proceso | python.exe (C:\Program Files\Python312) | T1486 |
 | Extensión | .locked | T1486 |
 | Archivo dropeado | README_RECOVER.txt | T1486 |
 | Comando | vssadmin.exe delete shadows /all /quiet | T1490 |
@@ -482,19 +500,20 @@ Ataque de ransomware simulado detectado el 24/08/2026 en el endpoint `DESKTOP-60
 
 ### Recomendaciones
 
-| Prioridad | Acción |
-|---|---|
-| Alta | Reglas custom específicas para T1489/T1490 (vssadmin/wbadmin/sc.exe con args destructivos) |
-| Alta | Canal `System` en agente Wazuh para capturar EID 7036 |
-| Alta | Backup offline no afectable por T1490 |
-| Media | python.exe en monitoreo EID 1 de Sysmon |
-| Media | Regla de correlación temporal T1489+T1490 → pre-alerta ransomware |
+| Prioridad | Control ISO 27001 | Acción |
+|---|---|---|
+| Crítica | A.8.13 | Backup offline (air-gapped) no afectable por T1490 |
+| Alta | A.5.25 | Reglas custom para T1489/T1490 con mapeo correcto de táctica |
+| Alta | A.8.16 | Canal `System` en agente Wazuh para capturar EID 7036 |
+| Alta | A.5.25 | Regla de correlación temporal T1489+T1490 → pre-alerta ransomware |
+| Media | A.8.16 | python.exe en monitoreo EID 1 de Sysmon |
 
 ---
 
 ## Hallazgos y Gaps de Cobertura
 
 ### Gap 1 — EID 7036 no recolectado (T1489)
+
 El Service Control Manager registra cambios de estado en el canal `System`. El agente no lo reenvía. Detección parcial: ejecución de `sc.exe` capturada, efecto (servicio detenido) no visible en SIEM.
 
 **Fix:** Agregar a `ossec.conf`:
@@ -506,6 +525,7 @@ El Service Control Manager registra cambios de estado en el canal `System`. El a
 ```
 
 ### Gap 2 — Reglas genéricas para T1489/T1490
+
 Las tres técnicas dispararon T1059.003 (Windows Command Shell), no T1489/T1490. El SIEM detectó shell sospechoso pero no identificó la táctica de destrucción de recovery.
 
 **Fix propuesto:**
@@ -520,9 +540,11 @@ Las tres técnicas dispararon T1059.003 (Windows Command Shell), no T1489/T1490.
 ```
 
 ### Gap 3 — EID 23 comentado en config base de Sysmon
+
 El Event ID 23 (FileDelete) estaba completamente comentado en el archivo de configuración de SwiftOnSecurity. Requirió modificación manual. Sin este cambio, la fase de eliminación de archivos originales sería invisible.
 
 ### Gap 4 — python.exe fuera del scope de monitoreo
+
 El proceso cifrador no disparó EID 1 porque `python.exe` no está en las reglas de include del Sysmon config base.
 
 ---
@@ -541,7 +563,7 @@ Ver portafolio completo de reglas (100010–100110) en [Threat-Hunting-Detection
 ## Estructura del Repositorio
 
 ```
-ransomware-sim-lab/
+Ransomware-Simulation-Incident-Response-Lab/
 │
 ├── README.md
 ├── scripts/
@@ -552,35 +574,36 @@ ransomware-sim-lab/
 ├── sysmon-config/
 │   └── sysmon-t1486-additions.xml
 ├── docs/
-│   └── incident-report-INC-2026-0824-001.md
+│   └── incident-report-ISO27001-INC-2026-0824-001.md
 └── evidence/
-    ├── 01-T1489-sc-cmdline-detalle
-    ├── 02-T1489-cadena-proceso-wazuh
-    ├── 03-T1489-rule92032-alerta
-    ├── 04-T1490-vssadmin-cmdline-wazuh
-    ├── 05-T1490-vssadmin-cadena-padre
-    ├── 06-T1490-vssadmin-rule-mitre
-    ├── 07-T1486-ejecucion-python-encrypt
-    ├── 08-T1486-nota-rescate-readme-recover
-    ├── 09-T1486-archivos-locked-finanzas
-    ├── 10-T1486-13hits-overview-wazuh
-    ├── 11-T1490-wbadmin-cmdline-wazuh
-    ├── 12-T1490-wbadmin-cadena-padre
-    ├── 13-T1490-wbadmin-rule92052-mitre
-    ├── 14-Recuperacion-python-decrypt-output
-    ├── 15-Recuperacion-archivos-restaurados
-    ├── 16-T1486-rule100210-metadata-hashes
-    ├── 17-T1486-rule100210-groups-impact
-    ├── 18-T1486-rule100200-filecreate-locked
-    └── 19-T1486-rule100200-description-mitre
+    └── screenshots/
+        ├── 01-T1489-sc-cmdline-detalle.png
+        ├── 02-T1489-cadena-proceso-wazuh.png
+        ├── 03-T1489-rule92032-alerta.png
+        ├── 04-T1490-vssadmin-cmdline-wazuh.png
+        ├── 05-T1490-vssadmin-cadena-padre.png
+        ├── 06-T1490-vssadmin-rule-mitre.png
+        ├── 07-T1486-ejecucion-python-encrypt.png
+        ├── 08-T1486-nota-rescate-readme-recover.png
+        ├── 09-T1486-archivos-locked-finanzas.png
+        ├── 10-T1486-13hits-overview-wazuh.png
+        ├── 11-T1490-wbadmin-cmdline-wazuh.png
+        ├── 12-T1490-wbadmin-cadena-padre.png
+        ├── 13-T1490-wbadmin-rule92052-mitre.png
+        ├── 14-Recuperacion-python-decrypt-output.png
+        ├── 15-Recuperacion-archivos-restaurados.png
+        ├── 16-T1486-rule100210-metadata-hashes.png
+        ├── 17-T1486-rule100210-groups-impact.png
+        ├── 18-T1486-rule100200-filecreate-locked.png
+        └── 19-T1486-rule100200-description-mitre.png
 ```
 
 ---
 
 ## Autor
 
-**Brian Fernández**  
-Analista SOC en formación | Google Cybersecurity Professional  
-[GitHub](https://github.com/braianffernandez096-bripto) · [Linkedin](https://www.linkedin.com/in/braian-fernandez96)
+**Brian Fernández**
+Analista SOC en formación | Google Cybersecurity Professional
+[GitHub](https://github.com/braianffernandez096-bripto) · [LinkedIn](https://www.linkedin.com/in/braian-fernandez96)
 
 > Ver también: [SOC-Full-Attack-Chain-LAB](https://github.com/braianffernandez096-bripto/SOC-Full-Attack-Chain-LAB) | [Threat-Hunting-Detection-Lab](https://github.com/braianffernandez096-bripto/Threat-Hunting-Detection-Lab)
