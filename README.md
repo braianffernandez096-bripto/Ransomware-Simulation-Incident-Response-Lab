@@ -125,9 +125,9 @@ powershell.exe
        └─ sc.exe stop spooler
 ```
 
-![T1489 cadena de proceso en Wazuh](evidence/screenshots/01-T1489-cadena-proceso-wazuh.png)
+![T1489 cadena de proceso en Wazuh](evidence/screenshots/02-T1489-cadena-proceso-wazuh.png)
 
-![T1489 rule 92052 alerta](evidence/screenshots/03-T1489-rule92032-detalle.png)
+![T1489 rule 92052 alerta](evidence/screenshots/03-T1489-rule92032-alerta.png)
 
 > **Gap documentado:** El Event ID 7036 (Service Control Manager) no llegó a Wazuh porque el canal `System` no está configurado en el agente. La telemetría de Sysmon (EID 1) capturó la ejecución; el efecto fue confirmado directamente en el endpoint (`Status: Stopped`).
 
