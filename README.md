@@ -3,7 +3,15 @@
 > **Entorno educativo de simulación de ataque de ransomware con detección en Wazuh SIEM, respuesta a incidentes y recuperación completa.**
 
 ---
+## Tecnologías
 
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
+![Wazuh](https://img.shields.io/badge/Wazuh-4.14.7-red)
+![Sysmon](https://img.shields.io/badge/Sysmon-15.21-blue)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1486%2FT1489%2FT1490-orange)
+![Docker](https://img.shields.io/badge/Docker-Single--Node-blue?logo=docker)
+
+---
 ## 📋 Tabla de Contenidos
 
 - [Descripción General](#descripción-general)
@@ -565,16 +573,6 @@ ransomware-sim-lab/
     ├── 17-T1486-rule100200-filecreate-locked
     └── 18-T1486-rule100200-description-mitre
 ```
-
----
-
-## Tecnologías
-
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![Wazuh](https://img.shields.io/badge/Wazuh-4.14.7-red)
-![Sysmon](https://img.shields.io/badge/Sysmon-15.21-blue)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1486%2FT1489%2FT1490-orange)
-![Docker](https://img.shields.io/badge/Docker-Single--Node-blue?logo=docker)
 
 ---
 
