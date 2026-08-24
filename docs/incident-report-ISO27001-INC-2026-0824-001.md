@@ -69,20 +69,20 @@ La respuesta a este incidente se refleja en ese ciclo:
 ┌──────────────────────────────────────────────────────────────────┐
 │                  CICLO PDCA — ISO 27001                          │
 │                                                                  │
-│   PLAN                         DO                               │
-│   ────────────────────         ──────────────────────           │
-│   • Runbook de respuesta   --> • Contencion del endpoint        │
-│   • Reglas de deteccion    --> • Eradicacion del proceso        │
-│   • Wazuh + Sysmon         --> • Recuperacion con decrypt       │
-│   • RTO/RPO definidos      --> • Comunicacion a stakeholders    │
+│   PLAN                         DO                                │
+│   ────────────────────         ──────────────────────            │
+│   • Runbook de respuesta   --> • Contencion del endpoint         │
+│   • Reglas de deteccion    --> • Eradicacion del proceso         │
+│   • Wazuh + Sysmon         --> • Recuperacion con decrypt        │
+│   • RTO/RPO definidos      --> • Comunicacion a stakeholders     │
 │          │                              │                        │
 │          ▼                              ▼                        │
-│   ACT                          CHECK                            │
-│   ────────────────────         ──────────────────────           │
-│   • Nuevas reglas custom   <-- • Revision de alertas Wazuh     │
-│   • Config Sysmon EID 23   <-- • Gaps de cobertura analizados  │
-│   • Backup offline         <-- • RTO vs MTTR comparados        │
-│   • Correlacion T1490+T1489<-- • Post-mortem del incidente     │
+│   ACT                          CHECK                             │
+│   ────────────────────         ──────────────────────            │
+│   • Nuevas reglas custom   <-- • Revision de alertas Wazuh       │
+│   • Config Sysmon EID 23   <-- • Gaps de cobertura analizados    │
+│   • Backup offline         <-- • RTO vs MTTR comparados          │
+│   • Correlacion T1490+T1489<-- • Post-mortem del incidente       │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
