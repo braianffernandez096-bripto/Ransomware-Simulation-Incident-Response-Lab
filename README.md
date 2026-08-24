@@ -546,19 +546,24 @@ ransomware-sim-lab/
 ├── docs/
 │   └── incident-report-INC-2026-0824-001.md
 └── evidence/
-    ├── 01-T1489-cadena-proceso-wazuh.png
-    ├── 02-T1489-rule92052-alerta.png
-    ├── 03-T1490-vssadmin-cmdline-wazuh.png
-    ├── 04-T1490-vssadmin-cadena-padre.png
-    ├── 05-T1490-wbadmin-cmdline-wazuh.png
-    ├── 06-T1486-ejecucion-python-encrypt.png
-    ├── 07-T1486-archivos-locked-explorador.png
-    ├── 08-T1486-nota-rescate-readme-recover.png
-    ├── 09-T1486-13hits-overview-wazuh.png
-    ├── 10-T1486-rule100200-filecreate-detail.png
-    ├── 11-T1486-rule100210-filedelete-detail.png
-    ├── 12-Recuperacion-python-decrypt-output.png
-    └── 13-Recuperacion-archivos-restaurados.png
+    ├── 01-T1489-sc-cmdline-detalle
+    ├── 02-T1489-cadena-proceso-wazuh
+    ├── 03-T1489-rule92032-alerta
+    ├── 04-T1490-vssadmin-cmdline-wazuh
+    ├── 05-T1490-vssadmin-cadena-padre
+    ├── 06-T1490-vssadmin-rule-mitre
+    ├── 07-T1486-ejecucion-python-encrypt
+    ├── 08-T1486-nota-rescate-readme-recover
+    ├── 09-T1486-13hits-overview-wazuh
+    ├── 10-T1490-wbadmin-cmdline-wazuh
+    ├── 11-T1490-wbadmin-cadena-padre
+    ├── 12-T1490-wbadmin-rule92052-mitre
+    ├── 13-Recuperacion-python-decrypt-output
+    ├── 14-Recuperacion-archivos-restaurados
+    ├── 15-T1486-rule100210-metadata-hashes
+    ├── 16-T1486-rule100210-groups-impact
+    ├── 17-T1486-rule100200-filecreate-locked
+    └── 18-T1486-rule100200-description-mitre
 ```
 
 ---
