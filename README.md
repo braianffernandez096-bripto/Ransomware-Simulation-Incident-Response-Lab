@@ -562,16 +562,17 @@ ransomware-sim-lab/
     ├── 06-T1490-vssadmin-rule-mitre
     ├── 07-T1486-ejecucion-python-encrypt
     ├── 08-T1486-nota-rescate-readme-recover
-    ├── 09-T1486-13hits-overview-wazuh
-    ├── 10-T1490-wbadmin-cmdline-wazuh
-    ├── 11-T1490-wbadmin-cadena-padre
-    ├── 12-T1490-wbadmin-rule92052-mitre
-    ├── 13-Recuperacion-python-decrypt-output
-    ├── 14-Recuperacion-archivos-restaurados
-    ├── 15-T1486-rule100210-metadata-hashes
-    ├── 16-T1486-rule100210-groups-impact
-    ├── 17-T1486-rule100200-filecreate-locked
-    └── 18-T1486-rule100200-description-mitre
+    ├── 09-T1486-archivos-locked-finanzas
+    ├── 10-T1486-13hits-overview-wazuh
+    ├── 11-T1490-wbadmin-cmdline-wazuh
+    ├── 12-T1490-wbadmin-cadena-padre
+    ├── 13-T1490-wbadmin-rule92052-mitre
+    ├── 14-Recuperacion-python-decrypt-output
+    ├── 15-Recuperacion-archivos-restaurados
+    ├── 16-T1486-rule100210-metadata-hashes
+    ├── 17-T1486-rule100210-groups-impact
+    ├── 18-T1486-rule100200-filecreate-locked
+    └── 19-T1486-rule100200-description-mitre
 ```
 
 ---
