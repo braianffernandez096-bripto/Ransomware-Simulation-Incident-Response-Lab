@@ -151,7 +151,7 @@ Invoke-AtomicTest T1490-3
 # wbadmin delete catalog -quiet
 ```
 
-![T1490 wbadmin commandLine en Wazuh](evidence/screenshots/10-T1490-wbadmin-cmdline-wazuh.png)
+![T1490 wbadmin commandLine en Wazuh](evidence/screenshots/11-T1490-wbadmin-cmdline-wazuh.png)
 
 > **Hallazgo:** Las tres técnicas de T1489/T1490 fueron detectadas por reglas genéricas de shell (92032/92052), no por reglas específicas de la táctica. Ver sección [Gaps de Cobertura](#hallazgos-y-gaps-de-cobertura).
 
@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
 ![Archivos cifrados y nota de rescate](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
 
-![Nota de rescate README_RECOVER.txt](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
+![Nota de rescate README_RECOVER.txt](evidence/screenshots/09-T1486-nota-rescate-readme-recover.png)
 
 ---
 
@@ -284,11 +284,11 @@ if __name__ == "__main__":
 rule.id: 100200 OR rule.id: 100210
 ```
 
-![Vista general 13 hits T1486 en Wazuh](evidence/screenshots/09-T1486-13hits-overview-wazuh.png)
+![Vista general 13 hits T1486 en Wazuh](evidence/screenshots/10-T1486-13hits-overview-wazuh.png)
 
-![Rule 100200 FileCreate .locked detail](evidence/screenshots/17-T1486-rule100200-filecreate-locked.png)
+![Rule 100200 FileCreate .locked detail](evidence/screenshots/18-T1486-rule100200-filecreate-locked.png)
 
-![Rule 100210 FileDelete python.exe detail](evidence/screenshots/15-T1486-rule100210-metadata-hashes.png)
+![Rule 100210 FileDelete python.exe detail](evidence/screenshots/16-T1486-rule100210-metadata-hashes.png)
 
 | Rule ID | EID Sysmon | Descripción | Level | Tactic | Hits |
 |---|---|---|---|---|---|
@@ -430,9 +430,9 @@ if __name__ == "__main__":
 & "C:\Program Files\Python312\python.exe" C:\SimLab\ransomware_decrypt.py
 ```
 
-![Output Python decrypt - recuperación completa](evidence/screenshots/13-Recuperacion-python-decrypt-output.png)
+![Output Python decrypt - recuperación completa](evidence/screenshots/14-Recuperacion-python-decrypt-output.png)
 
-![Archivos .txt restaurados en el explorador](evidence/screenshots/14-Recuperacion-archivos-restaurados.png)
+![Archivos .txt restaurados en el explorador](evidence/screenshots/15-Recuperacion-archivos-restaurados.png)
 
 ---
 
