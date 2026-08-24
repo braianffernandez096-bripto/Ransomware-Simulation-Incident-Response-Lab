@@ -581,6 +581,6 @@ ransomware-sim-lab/
 
 **Brian Fernández**  
 Analista SOC en formación | Google Cybersecurity Professional  
-[GitHub](https://github.com/braianffernandez096-bripto) · [Linkedin](https://www.linkedin.com/in/braian-fernandez96)(#)
+[GitHub](https://github.com/braianffernandez096-bripto) · [Linkedin](https://www.linkedin.com/in/braian-fernandez96)
 
 > Ver también: [SOC-Full-Attack-Chain-LAB](https://github.com/braianffernandez096-bripto/SOC-Full-Attack-Chain-LAB) | [Threat-Hunting-Detection-Lab](https://github.com/braianffernandez096-bripto/Threat-Hunting-Detection-Lab)
