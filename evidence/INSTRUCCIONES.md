@@ -75,6 +75,7 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 | 12-T1490-wbadmin-rule92052-mitre.png | T1486 | Alta |
 | 13-Recuperacion-python-decrypt-output.png | T1486 | Alta |
 | 14-Recuperacion-archivos-restaurados.png | T1486 | Alta |
+| 15-T1486-rule100210-metadata-hashes.png | T1486 | Alta |
 | 16-T1486-rule100210-groups-impact.png | T1486 | Alta |
 | 17-T1486-rule100200-filecreate-locked.png | T1486 | Alta |
 | 18-T1486-rule100200-description-mitree.png | T1486 | Alta |
