@@ -11,11 +11,11 @@
 
 **Analista responsable:** Braian Fernandez
 
-**Marco de gestión:   ISO/IEC 27001:2022
+**Marco de gestión:**   ISO/IEC 27001:2022
 
-**Marco operativo:    NIST SP 800-61 Rev. 2
+**Marco operativo:**    NIST SP 800-61 Rev. 2
 
-**Matriz de amenazas: MITRE ATT&CK v14
+**Matriz de amenazas:** MITRE ATT&CK v14
 
 **Estado:** CERRADO - Recuperacion completa y verificada
 
