@@ -1,11 +1,17 @@
 # REPORTE EJECUTIVO DE INCIDENTE DE SEGURIDAD
 
 **Clasificacion:** CONFIDENCIAL - USO INTERNO
+
 **Tipo de incidente:** Ransomware
+
 **ID de incidente:** INC-2026-0824-001
+
 **Fecha de deteccion:** 24 de agosto de 2026 - 00:57 UTC
+
 **Analista responsable:** Brian Fernandez
+
 **Marco de referencia:** NIST SP 800-61 Rev. 2 (Computer Security Incident Handling Guide)
+
 **Estado:** CERRADO - Recuperacion completa
 
 ---
