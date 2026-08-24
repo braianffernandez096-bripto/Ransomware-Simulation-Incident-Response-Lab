@@ -2,21 +2,13 @@
 ## Alineado a ISO/IEC 27001:2022
 
 **Clasificacion:** CONFIDENCIAL - USO INTERNO
-
 **Tipo de incidente:** Ransomware / Cifrado de datos
-
 **ID de incidente:** INC-2026-0824-001
-
 **Fecha de deteccion:** 24 de agosto de 2026 - 00:57 UTC
-
-**Analista responsable:** Braian Fernandez
-
-**Marco de gestión:**   ISO/IEC 27001:2022
-
-**Marco operativo:**    NIST SP 800-61 Rev. 2
-
+**Analista responsable:** Brian Fernandez
+**Marco de gestión:** ISO/IEC 27001:2022
+**Marco operativo:** NIST SP 800-61 Rev. 2
 **Matriz de amenazas:** MITRE ATT&CK v14
-
 **Estado:** CERRADO - Recuperacion completa y verificada
 
 ---
@@ -213,8 +205,8 @@ La respuesta a este incidente se refleja en ese ciclo:
 
 | Proceso afectado | Procedimiento alternativo | Responsable | Control ISO |
 |---|---|---|---|
-| Acceso a documentos Finanzas | Backup offline o cloud alternativo | Area Finanzas | A.5.29 |
-| Acceso a documentos RRHH | Sistema de contingencia | Area RRHH | A.5.29 |
+| Acceso a documentos Finanzas | Procedimiento manual + escalado a IT para evaluacion de recovery | Area Finanzas | A.5.29 |
+| Acceso a documentos RRHH | Procedimiento manual + uso de copias de trabajo locales | Area RRHH | A.5.29 |
 | Operaciones del endpoint | Reasignacion temporal | IT | A.5.29 |
 | Comunicacion interna | Canal alternativo fuera del dominio | TI | A.5.29 |
 | Notificacion stakeholders | Dentro de los 30 min de confirmacion | CISO | A.6.8 |
@@ -321,13 +313,13 @@ y 10.2 de ISO/IEC 27001:2022, y los controles del Anexo A referenciados en cada 
 
 | Clausula ISO 27001 | Descripcion | Evidencia en este reporte |
 |---|---|---|
-| 6.1.2 | Evaluacion de riesgos de seguridad | BIA, tabla de impacto (seccion 7) |
+| 6.1.2 | Evaluacion de riesgos de seguridad | BIA, tabla de impacto (seccion 8.2) |
 | 8.2 | Evaluacion de riesgos de la informacion | Gaps y plan de mejora (seccion 9) |
 | 9.1 | Seguimiento, medicion, analisis y evaluacion | RTO/RPO/MTTR (seccion 8.1) |
 | 10.2 | Mejora continua | Plan de accion post-incidente (seccion 9) |
 | Anexo A.5.24-5.30 | Gestion de incidentes de seguridad | Secciones 4, 5, 8 |
 | Anexo A.6.8 | Notificacion de eventos | Arbol de comunicacion (seccion 8.3) |
-| Anexo A.8.7 | Proteccion contra malware | Gaps 5 y 6 (seccion 9) |
+| Anexo A.8.7 | Proteccion contra malware | Gap 6 (seccion 9) |
 | Anexo A.8.13 | Copia de seguridad | Gap critico 5 (seccion 9) |
 | Anexo A.8.16 | Actividades de monitoreo | Deteccion Wazuh/Sysmon (secciones 4, 5) |
 
@@ -347,4 +339,4 @@ y 10.2 de ISO/IEC 27001:2022, y los controles del Anexo A referenciados en cada 
 **Clasificacion del documento:** CONFIDENCIAL - USO INTERNO
 **Proximo ciclo de revision:** 90 dias post-cierre o ante nuevo incidente similar
 **Marcos normativos:** ISO/IEC 27001:2022 | NIST SP 800-61 Rev. 2 | MITRE ATT&CK v14
-**Version:** 2.0 | **Reemplaza:** incident-report-INC-2026-0824-001.md v1.0
+**Version:** 1.0
