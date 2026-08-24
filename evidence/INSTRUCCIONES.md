@@ -61,24 +61,23 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 
 | Archivo | Técnica | Prioridad |
 |---|---|---|
-| 01-T1489-cadena-proceso-wazuh.png | T1489 | Alta |
-| 02-T1489-sc-cmdline-detalle.png | T1489 | Alta |
-| 03-T1489-rule92032-detalle.png | T1489 | Alta |
-| 05-T1490-vssadmin-cmdline-wazuh.png | T1490 | Alta |
-| 07-T1490-vssadmin-cadena-padre.png | T1490 | Alta |
-| 08-T1490-vssadmin-rule-mitre.png | T1490 | Alta |
-| 10-T1490-wbadmin-cmdline-wazuh.png | T1490 | Alta |
-| 12-T1490-wbadmin-cadena-padre.png | T1490 | Alta |
-| 13-T1490-wbadmin-rule92052-mitre.png | T1490 | Media |
-| 14-T1486-ejecucion-python-encrypt.png | T1486 | Alta |
-| 15-T1486-nota-rescate-readme-recover.png | T1486 | Alta |
-| 16-T1486-13hits-overview-wazuh.png | T1486 | Alta |
-| 17-T1486-rule100210-metadata-hashes.png | T1486 | Alta |
-| 18-T1486-rule100210-groups-impact.png | T1486 | Alta |
-| 19-T1486-rule100200-filecreate-locked.png | T1486 | Alta |
-| 20-T1486-rule100200-description-mitre.png | T1486 | Alta |
-| 27-Recuperacion-python-decrypt-output.png | T1486 | Alta |
-| 28-Recuperacion-archivos-restaurados.png | T1486 | Alta |
+| 01-T1489-sc-cmdline-detalle.png | T1489 | Alta |
+| 02-T1489-cadena-proceso-wazuh.png | T1489 | Alta |
+| 03-T1489-rule92032-alerta.png | T1489 | Alta |
+| 04-T1490-vssadmin-cmdline-wazuh.png | T1490 | Alta |
+| 05-T1490-vssadmin-cadena-padre.png | T1490 | Alta |
+| 06-T1490-vssadmin-rule-mitre.png | T1490 | Alta |
+| 07-T1486-ejecucion-python-encrypt.png | T1490 | Alta |
+| 08-T1486-nota-rescate-readme-recover.png | T1490 | Alta |
+| 09-T1486-13hits-overview-wazuh.png | T1490 | Media |
+| 10-T1490-wbadmin-cmdline-wazuh.png | T1486 | Alta |
+| 11-T1490-wbadmin-cadena-padre.png | T1486 | Alta |
+| 12-T1490-wbadmin-rule92052-mitre.png | T1486 | Alta |
+| 13-Recuperacion-python-decrypt-output.png | T1486 | Alta |
+| 14-Recuperacion-archivos-restaurados.png | T1486 | Alta |
+| 16-T1486-rule100210-groups-impact.png | T1486 | Alta |
+| 17-T1486-rule100200-filecreate-locked.png | T1486 | Alta |
+| 18-T1486-rule100200-description-mitree.png | T1486 | Alta |
 
 **Total: 18 capturas — 17 Alta, 1 Media**
 
