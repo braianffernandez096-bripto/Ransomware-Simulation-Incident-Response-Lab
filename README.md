@@ -284,11 +284,11 @@ if __name__ == "__main__":
 rule.id: 100200 OR rule.id: 100210
 ```
 
-![Vista general 13 hits T1486 en Wazuh](evidence/screenshots/16-T1486-13hits-overview-wazuh.png)
+![Vista general 13 hits T1486 en Wazuh](evidence/screenshots/09-T1486-13hits-overview-wazuh.png)
 
-![Rule 100200 FileCreate .locked detail](evidence/screenshots/19-T1486-rule100200-filecreate-locked.png)
+![Rule 100200 FileCreate .locked detail](evidence/screenshots/17-T1486-rule100200-filecreate-locked.png)
 
-![Rule 100210 FileDelete python.exe detail](evidence/screenshots/17-T1486-rule100210-metadata-hashes.png)
+![Rule 100210 FileDelete python.exe detail](evidence/screenshots/15-T1486-rule100210-metadata-hashes.png)
 
 | Rule ID | EID Sysmon | Descripción | Level | Tactic | Hits |
 |---|---|---|---|---|---|
@@ -430,9 +430,9 @@ if __name__ == "__main__":
 & "C:\Program Files\Python312\python.exe" C:\SimLab\ransomware_decrypt.py
 ```
 
-![Output Python decrypt - recuperación completa](evidence/screenshots/27-Recuperacion-python-decrypt-output.png)
+![Output Python decrypt - recuperación completa](evidence/screenshots/13-Recuperacion-python-decrypt-output.png)
 
-![Archivos .txt restaurados en el explorador](evidence/screenshots/28-Recuperacion-archivos-restaurados.png)
+![Archivos .txt restaurados en el explorador](evidence/screenshots/14-Recuperacion-archivos-restaurados.png)
 
 ---
 
