@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
 ![Archivos cifrados y nota de rescate](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
 
-![Nota de rescate README_RECOVER.txt](evidence/screenshots/09-T1486-nota-rescate-readme-recover.png)
+![Nota de rescate README_RECOVER.txt](evidence/screenshots/09-T1486-archivos-locked-finanzas.png)
 
 ---
 
