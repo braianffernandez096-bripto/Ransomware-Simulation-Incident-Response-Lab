@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  =============================================================
+  Modificaciones a sysmonconfig-export.xml para cobertura T1486
+  Archivo base: SwiftOnSecurity sysmonconfig-export.xml
+  =============================================================
+
+  INSTRUCCIONES:
+  Este archivo documenta los dos cambios necesarios en el
+  sysmonconfig principal. No reemplaza el archivo completo,
+  solo muestra los fragmentos a insertar.
+
+  RECARGA tras modificar (PowerShell como Administrador):
+  C:\Sysmon\Sysmon64.exe -c C:\Sysmon\sysmonconfig-export.xml
+  Salida esperada: Configuration updated.
+-->
+<SysmonT1486Additions>
+
+  <!--
+    CAMBIO 1 — EID 11 (FileCreate)
+    Insertar dentro de <FileCreate onmatch="include">
+    justo antes del cierre </FileCreate>
+  -->
+  <Cambio id="1" evento="EID 11 FileCreate" tecnica="T1486">
+    <TargetFilename name="T1486" condition="end with">.locked</TargetFilename>
+    <!-- Ransomware: archivo cifrado con extension .locked -->
+  </Cambio>
+
+  <!--
+    CAMBIO 2 — EID 23 (FileDelete)
+    Reemplazar el bloque comentado del Event ID 23
+    por este bloque activo (descomentar y agregar la regla)
+  -->
+  <Cambio id="2" evento="EID 23 FileDelete" tecnica="T1486">
+    <RuleGroup name="" groupRelation="or">
+      <FileDelete onmatch="include">
+        <Image name="T1486" condition="end with">python.exe</Image>
+        <!-- Ransomware sim: eliminacion de archivos originales tras cifrado -->
+      </FileDelete>
+    </RuleGroup>
+  </Cambio>
+
+</SysmonT1486Additions>
