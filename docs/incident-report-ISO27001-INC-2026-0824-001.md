@@ -2,13 +2,21 @@
 ## Alineado a ISO/IEC 27001:2022
 
 **Clasificacion:** CONFIDENCIAL - USO INTERNO
+
 **Tipo de incidente:** Ransomware / Cifrado de datos
+
 **ID de incidente:** INC-2026-0824-001
+
 **Fecha de deteccion:** 24 de agosto de 2026 - 00:57 UTC
+
 **Analista responsable:** Brian Fernandez
+
 **Marco de gestión:   ISO/IEC 27001:2022
+
 **Marco operativo:    NIST SP 800-61 Rev. 2
+
 **Matriz de amenazas: MITRE ATT&CK v14
+
 **Estado:** CERRADO - Recuperacion completa y verificada
 
 ---
