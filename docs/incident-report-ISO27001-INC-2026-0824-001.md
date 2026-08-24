@@ -9,7 +9,7 @@
 
 **Fecha de deteccion:** 24 de agosto de 2026 - 00:57 UTC
 
-**Analista responsable:** Brian Fernandez
+**Analista responsable:** Braian Fernandez
 
 **Marco de gestión:   ISO/IEC 27001:2022
 
