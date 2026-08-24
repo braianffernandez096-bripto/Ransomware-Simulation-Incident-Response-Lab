@@ -49,11 +49,11 @@ El objetivo es demostrar capacidades de **detección, análisis y respuesta** pr
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     RED INTERNA (NAT)                           │
+│                      RED INTERNA (NAT)                          │
 │                                                                 │
 │  ┌──────────────────┐         ┌──────────────────────────────┐  │
-│  │  Windows 10 Pro  │         │       Ubuntu 22.04 LTS       │  │
-│  │  (VÍCTIMA)       │ ──────▶│       (ANÁLISIS)             │  │
+│  │  Windows 10 Pro  │         │      Ubuntu 22.04 LTS        │  │
+│  │  (VÍCTIMA)       │───────▶│      (ANÁLISIS)              │  │
 │  │                  │         │                              │  │
 │  │ • Sysmon 15.21   │         │ • Wazuh Manager 4.14.7       │  │
 │  │ • Wazuh Agent    │         │ • Wazuh Indexer 4.14.7       │  │
