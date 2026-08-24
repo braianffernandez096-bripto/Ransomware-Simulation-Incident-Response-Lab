@@ -141,9 +141,9 @@ Invoke-AtomicTest T1490-1
 # vssadmin.exe delete shadows /all /quiet
 ```
 
-![T1490 vssadmin commandLine en Wazuh](evidence/screenshots/05-T1490-vssadmin-cmdline-wazuh.png)
+![T1490 vssadmin commandLine en Wazuh](evidence/screenshots/04-T1490-vssadmin-cmdline-wazuh.png)
 
-![T1490 vssadmin cadena padre](evidence/screenshots/07-T1490-vssadmin-cadena-padre.png)
+![T1490 vssadmin cadena padre](evidence/screenshots/05-T1490-vssadmin-cadena-padre.png)
 
 **T1490-3 — Delete Backup Catalog:**
 ```powershell
@@ -245,11 +245,11 @@ if __name__ == "__main__":
 & "C:\Program Files\Python312\python.exe" C:\SimLab\ransomware_sim.py
 ```
 
-![Ejecución Python encrypt output](evidence/screenshots/14-T1486-ejecucion-python-encrypt.png)
+![Ejecución Python encrypt output](evidence/screenshots/07-T1486-ejecucion-python-encrypt.png)
 
-![Archivos cifrados y nota de rescate](evidence/screenshots/15-T1486-nota-rescate-readme-recover.png)
+![Archivos cifrados y nota de rescate](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
 
-![Nota de rescate README_RECOVER.txt](evidence/screenshots/15-T1486-nota-rescate-readme-recover.png)
+![Nota de rescate README_RECOVER.txt](evidence/screenshots/08-T1486-nota-rescate-readme-recover.png)
 
 ---
 
