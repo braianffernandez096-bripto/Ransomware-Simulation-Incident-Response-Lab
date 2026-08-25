@@ -27,9 +27,9 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 
 | Archivo | Qué muestra | Prioridad |
 |---|---|---|
-| `10-T1490-wbadmin-cmdline-wazuh.png` | Documento expandido — commandLine `wbadmin delete catalog -quiet` resaltado | Alta |
-| `11-T1490-wbadmin-cadena-padre.png` | Proceso padre — commandLine `"cmd.exe" /c wbadmin delete catalog` resaltado | Alta |
-| `12-T1490-wbadmin-rule92052-mitre.png` | Sección de regla — rule.id 92052, confirma patrón para wbadmin | Media |
+| `11-T1490-wbadmin-cmdline-wazuh.png` | Documento expandido — commandLine `wbadmin delete catalog -quiet` resaltado | Alta |
+| `12-T1490-wbadmin-cadena-padre.png` | Proceso padre — commandLine `"cmd.exe" /c wbadmin delete catalog` resaltado | Alta |
+| `13-T1490-wbadmin-rule92052-mitre.png` | Sección de regla — rule.id 92052, confirma patrón para wbadmin | Media |
 
 ### T1486 — Data Encrypted for Impact (cifrado)
 
@@ -44,17 +44,17 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 | Archivo | Qué muestra | Prioridad |
 |---|---|---|
 | `10-T1486-13hits-overview-wazuh.png` | Overview general — 13 hits en el gráfico, filtro rule.id 100200 OR 100210 | Alta |
-| `15-T1486-rule100210-metadata-hashes.png` | Documento rule 100210 — archived:true, hashes, image python.exe, targetFilename .txt eliminado | Alta |
-| `16-T1486-rule100210-groups-impact.png` | Sección regla 100210 — groups ransomware/t1486, rule.mail true, mitre T1486 Impact | Alta |
-| `17-T1486-rule100200-filecreate-locked.png` | Documento rule 100200 — targetFilename .locked, image python.exe, ruleName T1486 | Alta |
-| `18-T1486-rule100200-description-mitre.png` | Sección regla 100200 — description completo, rule.id, mitre T1486 Data Encrypted for Impact | Alta |
+| `16-T1486-rule100210-metadata-hashes.png` | Documento rule 100210 — archived:true, hashes, image python.exe, targetFilename .txt eliminado | Alta |
+| `17-T1486-rule100210-groups-impact.png` | Sección regla 100210 — groups ransomware/t1486, rule.mail true, mitre T1486 Impact | Alta |
+| `18-T1486-rule100200-filecreate-locked.png` | Documento rule 100200 — targetFilename .locked, image python.exe, ruleName T1486 | Alta |
+| `19-T1486-rule100200-description-mitre.png` | Sección regla 100200 — description completo, rule.id, mitre T1486 Data Encrypted for Impact | Alta |
 
 ### Recuperación
 
 | Archivo | Qué muestra | Prioridad |
 |---|---|---|
-| `13-Recuperacion-python-decrypt-output.png` | Output completo de `ransomware_decrypt.py` — 6 archivos restaurados, notas eliminadas | Alta |
-| `14-Recuperacion-archivos-restaurados.png` | Explorador de archivos — carpeta Finanzas con .txt restaurados (sin .locked) | Alta |
+| `14-Recuperacion-python-decrypt-output.png` | Output completo de `ransomware_decrypt.py` — 6 archivos restaurados, notas eliminadas | Alta |
+| `15-Recuperacion-archivos-restaurados.png` | Explorador de archivos — carpeta Finanzas con .txt restaurados (sin .locked) | Alta |
 
 ---
 
