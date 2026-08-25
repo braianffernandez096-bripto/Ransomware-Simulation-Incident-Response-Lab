@@ -185,7 +185,7 @@ C:\SimLab\
 
 ### Script de Cifrado — `ransomware_sim.py`
 
-```python
+``` python
 import os
 from cryptography.fernet import Fernet
 
@@ -395,7 +395,7 @@ data.win.system.eventID: 1 AND data.win.eventdata.image: *python*
 
 ### Script de Descifrado — `ransomware_decrypt.py`
 
-```python
+``` python
 import os
 from cryptography.fernet import Fernet
 
