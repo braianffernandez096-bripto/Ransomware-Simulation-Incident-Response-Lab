@@ -35,14 +35,15 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 
 | Archivo | Qué muestra | Prioridad |
 |---|---|---|
-| `07-T1486-ejecucion-python-encrypt.png` | Output completo de `ransomware_sim.py` en PowerShell — 6 archivos cifrados, clave guardada | Alta |
+| `07-T1486-ejecucion-python-encrypt.png` | Output completo de `ransomware_sim.py` en PowerShell — 6 archivos cifrados, clave guardada | Alta|
 | `08-T1486-nota-rescate-readme-recover.png` | Explorador de archivos + Notepad con README_RECOVER.txt abierto | Alta |
+| `09-T1486-archivos-locked-finanzas.png` | Explorador de archivos — carpeta Finanzas con archivos `.locked` listados (Tipo: "Archivo LOCKED") | Alta |
 
 ### T1486 — Data Encrypted for Impact (detección Wazuh)
 
 | Archivo | Qué muestra | Prioridad |
 |---|---|---|
-| `09-T1486-13hits-overview-wazuh.png` | Overview general — 13 hits en el gráfico, filtro rule.id 100200 OR 100210 | Alta |
+| `10-T1486-13hits-overview-wazuh.png` | Overview general — 13 hits en el gráfico, filtro rule.id 100200 OR 100210 | Alta |
 | `15-T1486-rule100210-metadata-hashes.png` | Documento rule 100210 — archived:true, hashes, image python.exe, targetFilename .txt eliminado | Alta |
 | `16-T1486-rule100210-groups-impact.png` | Sección regla 100210 — groups ransomware/t1486, rule.mail true, mitre T1486 Impact | Alta |
 | `17-T1486-rule100200-filecreate-locked.png` | Documento rule 100200 — targetFilename .locked, image python.exe, ruleName T1486 | Alta |
