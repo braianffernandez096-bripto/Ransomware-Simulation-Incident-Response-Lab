@@ -69,15 +69,16 @@ Los nombres de archivo ya están asignados y coinciden con las referencias del R
 | 06-T1490-vssadmin-rule-mitre.png | T1490 | Alta |
 | 07-T1486-ejecucion-python-encrypt.png | T1490 | Alta |
 | 08-T1486-nota-rescate-readme-recover.png | T1490 | Alta |
-| 09-T1486-13hits-overview-wazuh.png | T1490 | Media |
-| 10-T1490-wbadmin-cmdline-wazuh.png | T1486 | Alta |
-| 11-T1490-wbadmin-cadena-padre.png | T1486 | Alta |
-| 12-T1490-wbadmin-rule92052-mitre.png | T1486 | Alta |
-| 13-Recuperacion-python-decrypt-output.png | T1486 | Alta |
-| 14-Recuperacion-archivos-restaurados.png | T1486 | Alta |
-| 15-T1486-rule100210-metadata-hashes.png | T1486 | Alta |
-| 16-T1486-rule100210-groups-impact.png | T1486 | Alta |
-| 17-T1486-rule100200-filecreate-locked.png | T1486 | Alta |
-| 18-T1486-rule100200-description-mitree.png | T1486 | Alta |
+| 09-T1486-archivos-locked-finanzas.png | T1490 | Media |
+| 10-T1486-13hits-overview-wazuh.png | T1490 | Media |
+| 11-T1490-wbadmin-cmdline-wazuh.png | T1486 | Alta |
+| 12-T1490-wbadmin-cadena-padre.png | T1486 | Alta |
+| 13-T1490-wbadmin-rule92052-mitre.png | T1486 | Alta |
+| 14-Recuperacion-python-decrypt-output.png | T1486 | Alta |
+| 15-Recuperacion-archivos-restaurados.png | T1486 | Alta |
+| 16-T1486-rule100210-metadata-hashes.png | T1486 | Alta |
+| 17-T1486-rule100210-groups-impact.png | T1486 | Alta |
+| 18-T1486-rule100200-filecreate-locked.png | T1486 | Alta |
+| 19-T1486-rule100200-description-mitree.png | T1486 | Alta |
 
 **Total: 18 capturas — 17 Alta, 1 Media**
