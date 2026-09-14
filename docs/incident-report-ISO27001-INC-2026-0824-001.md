@@ -314,7 +314,7 @@ para incidentes de seguridad.
 
 ---
 
-## 11. Declaracion de Conformidad ISO/IEC 27001:2022
+## 11. Mapeo de referencia a controles ISO/IEC 27001:2022
 
 Este reporte ha sido elaborado siguiendo los requisitos de las clausulas 6.1.2, 8.2, 9.1
 y 10.2 de ISO/IEC 27001:2022, y los controles del Anexo A referenciados en cada seccion.
