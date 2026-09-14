@@ -601,7 +601,7 @@ Ransomware-Simulation-Incident-Response-Lab/
 
 ## Autor
 
-**Brian Fernández**
+**Braian Fernandez**
 Analista SOC en formación | Google Cybersecurity Professional
 [GitHub](https://github.com/braianffernandez096-bripto) · [LinkedIn](https://www.linkedin.com/in/braian-fernandez96)
 
