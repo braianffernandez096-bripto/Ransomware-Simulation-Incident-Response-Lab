@@ -337,7 +337,7 @@ y 10.2 de ISO/IEC 27001:2022, y los controles del Anexo A referenciados en cada 
 
 | Rol | Nombre | Fecha | Firma |
 |---|---|---|---|
-| Analista SOC (Autor) | Brian Fernandez | 24/08/2026 | |
+| Analista SOC (Autor) | Braian Fernandez | 24/08/2026 | |
 | Revisor de Seguridad (ISO 27001) | | | |
 | CISO / Aprobador | | | |
 | Responsable del SGSI | | | |
