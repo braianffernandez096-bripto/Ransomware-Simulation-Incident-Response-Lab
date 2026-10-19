@@ -1,5 +1,5 @@
 <group name="local,sysmon,">
-a
+  
   <rule id="100010" level="0">
     <if_sid>92213</if_sid>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)PSScriptPolicyTest</field>
