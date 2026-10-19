@@ -194,8 +194,7 @@ KEY_FILE      = r"C:\SimLab\decrypt_key.key"
 EXT_LOCKED    = ".locked"
 RANSOM_NOTE   = "README_RECOVER.txt"
 
-# Nota tecnica: Fernet usa AES-128-CBC + HMAC-SHA256. El "AES-256" de la nota
-# es la afirmacion del atacante simulado, no el algoritmo real de este script.
+
 RANSOM_TEXT = """
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
               TODOS TUS ARCHIVOS HAN SIDO CIFRADOS
