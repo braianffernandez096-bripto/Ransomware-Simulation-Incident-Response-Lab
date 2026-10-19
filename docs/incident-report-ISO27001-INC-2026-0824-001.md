@@ -306,7 +306,7 @@ Estas son las cláusulas y los controles que usé como guía, y dónde aparecen 
 
 ---
 
-## 13. Firmas y aprobación
+## 13. Firmas y aprobación (Sección de ejemplo — no aplica en un laboratorio individual)
 
 | Rol | Nombre | Fecha | Firma |
 |---|---|---|---|
