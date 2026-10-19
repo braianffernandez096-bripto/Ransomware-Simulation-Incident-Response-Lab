@@ -132,7 +132,6 @@ powershell.exe
 
 ![T1489 rule 92032 alerta](evidence/screenshots/03-T1489-rule92032-alerta.png)
 
-> **Gap documentado:** El Event ID 7036 (Service Control Manager) no llegó a Wazuh porque el canal `System` no está configurado en el agente. La telemetría de Sysmon (EID 1) capturó la ejecución; el efecto fue confirmado directamente en el endpoint (`Status: Stopped`).
 
 ---
 
