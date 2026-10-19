@@ -19,7 +19,7 @@ Este laboratorio simula una cadena de ataque completa de ransomware en un entorn
 
 El objetivo es demostrar capacidades de **detección, análisis y respuesta** propias de un analista SOC:
 
-- Simulación técnica de comportamiento de ransomware real (WannaCry, Olympic Destroyer, LockBit)
+- Simulación de técnicas de pre-cifrado y cifrado (T1489, T1490, T1486) que usan familias reales como WannaCry, Olympic Destroyer y LockBit. El cifrador es un simulador simplificado, no un clon de ninguna familia
 - Detección via telemetría de Sysmon correlacionada en Wazuh
 - Creación de reglas custom mapeadas a MITRE ATT&CK
 - Identificación de gaps de cobertura en la configuración del agente
@@ -106,7 +106,7 @@ ransomware_decrypt.py
 | Stop Service | T1489 | Impact | Atomic Red Team T1489-1 | ✅ Rules 92032/92052 |
 | Delete Volume Shadow Copies | T1490 | Impact | Atomic Red Team T1490-1 | ✅ Rules 92032/92052 |
 | Delete Backup Catalog | T1490 | Impact | Atomic Red Team T1490-3 | ✅ Rules 92032/92052 |
-| Data Encrypted for Impact | T1486 | Impact | Script Python Fernet/AES | ✅ Rules 100200/100210 |
+| Data Encrypted for Impact | T1486 | Impact | Script Python (Fernet: AES-128-CBC + HMAC-SHA256) | ✅ Rules 100200/100210 |
 
 ---
 
@@ -194,6 +194,8 @@ KEY_FILE      = r"C:\SimLab\decrypt_key.key"
 EXT_LOCKED    = ".locked"
 RANSOM_NOTE   = "README_RECOVER.txt"
 
+# Nota tecnica: Fernet usa AES-128-CBC + HMAC-SHA256. El "AES-256" de la nota
+# es la afirmacion del atacante simulado, no el algoritmo real de este script.
 RANSOM_TEXT = """
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
               TODOS TUS ARCHIVOS HAN SIDO CIFRADOS
@@ -273,7 +275,7 @@ if __name__ == "__main__":
   <if_group>sysmon</if_group>
   <field name="win.system.eventID">^11$</field>
   <field name="win.eventdata.targetFilename" type="pcre2">\.locked$</field>
-  <description>T1486 - Ransomware: archivo cifrado creado (.locked) por python.exe</description>
+  <description>T1486 - Ransomware: archivo con extension .locked creado (Sysmon EID 11)</description>
   <mitre><id>T1486</id></mitre>
   <group>ransomware,t1486,sysmon_eid11,windows</group>
 </rule>
@@ -449,6 +451,8 @@ if __name__ == "__main__":
 
 ![Archivos .txt restaurados en el explorador](evidence/screenshots/15-Recuperacion-archivos-restaurados.png)
 
+> **Limitación del lab:** la clave quedó guardada en el mismo endpoint, por eso el descifrado fue trivial. En un incidente real sin clave, la recuperación depende de un backup offline (ver Gap 5 en [`docs/`](docs/incident-report-ISO27001-INC-2026-0824-001.md)).
+
 ---
 
 ## Reporte Ejecutivo del Incidente
@@ -483,8 +487,8 @@ Ataque de ransomware simulado detectado el 24/08/2026 en el endpoint `DESKTOP-60
 | Comando | vssadmin.exe delete shadows /all /quiet | T1490 |
 | Comando | wbadmin delete catalog -quiet | T1490 |
 | Comando | sc.exe stop spooler | T1489 |
-| Hash MD5 | B58073DB8892B67A672906C9358020EC (vssadmin.exe) | T1490 |
-| Hash SHA256 | 8C1FABCC2196E4D096B7D155837C5F699AD7F55EDBF84571E4F8E03500B7A8B0 | T1490 |
+
+> `vssadmin.exe` y `wbadmin.exe` son binarios legítimos de Windows: su hash no es un IoC. El indicador es el binario ejecutado con argumentos destructivos (líneas de comando de arriba). Los hashes de referencia están en [`docs/`](docs/incident-report-ISO27001-INC-2026-0824-001.md).
 
 ### Impacto
 
@@ -527,13 +531,15 @@ El Service Control Manager registra cambios de estado en el canal `System`. El a
 
 Las tres técnicas dispararon T1059.003 (Windows Command Shell), no T1489/T1490. El SIEM detectó shell sospechoso pero no identificó la táctica de destrucción de recovery.
 
-**Fix propuesto:**
+**Fix:** reglas 100220 (vssadmin), 100221 (wbadmin) y 100222 (sc.exe) incorporadas en [`wazuh-rules/local_rules.xml`](wazuh-rules/local_rules.xml). Estado: sintaxis y regex revisadas; falta validarlas con `wazuh-logtest` y volver a ejecutar T1489/T1490 para confirmar que disparan en lugar de las reglas genéricas 92032/92052.
+
+Ejemplo (100220):
 ```xml
 <rule id="100220" level="14">
   <if_group>sysmon_eid1_detections</if_group>
   <field name="win.eventdata.image" type="pcre2">(?i)vssadmin\.exe$</field>
   <field name="win.eventdata.commandLine" type="pcre2">(?i)delete\s+shadows</field>
-  <description>T1490 - Eliminación de Volume Shadow Copies via vssadmin</description>
+  <description>T1490 - Eliminacion de Volume Shadow Copies via vssadmin</description>
   <mitre><id>T1490</id></mitre>
 </rule>
 ```
@@ -552,8 +558,14 @@ El proceso cifrador no disparó EID 1 porque `python.exe` no está en las reglas
 
 | Rule ID | Técnica | EID Sysmon | Descripción | Level |
 |---|---|---|---|---|
-| 100200 | T1486 | 11 FileCreate | Archivo .locked creado por python.exe | 12 |
+| 100200 | T1486 | 11 FileCreate | Archivo .locked creado | 12 |
 | 100210 | T1486 | 23 FileDelete | Original eliminado por python.exe | 12 |
+| 100220 | T1490 | 1 Process Create | vssadmin delete shadows | 14 |
+| 100221 | T1490 | 1 Process Create | wbadmin delete catalog/backup | 14 |
+| 100222 | T1489 | 1 Process Create | sc.exe stop sobre servicios críticos o de backup | 10 |
+| 100240 | T1486 | 23 FileDelete | Ráfaga de borrados por el mismo proceso (5 en 10 s) | 14 |
+
+> **Alcance de las reglas de T1486:** 100200 y 100210 dependen de artefactos del simulador (extensión `.locked` y `python.exe`), así que detectan este lab, no una familia real. La 100240 es de comportamiento (ráfaga de borrados por un mismo proceso), pero hereda el alcance de telemetría del Sysmon del lab, que solo registra borrados de `python.exe`. En producción haría falta una config de FileDelete basada en exclusiones y un ajuste de ruido.
 
 Ver portafolio completo de reglas (100010–100110) en [Threat-Hunting-Detection-Lab](https://github.com/braianffernandez096-bripto/Threat-Hunting-Detection-Lab).
 
