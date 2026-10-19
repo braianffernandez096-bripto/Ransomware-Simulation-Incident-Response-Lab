@@ -1,362 +1,323 @@
-# REPORTE DE INCIDENTE DE SEGURIDAD DE LA INFORMACION
-## Alineado a ISO/IEC 27001:2022
+# Reporte de incidente INC-2026-0824-001: ransomware simulado
 
-**Clasificacion:** CONFIDENCIAL - USO INTERNO
+**Tipo de incidente:** ransomware (T1489, T1490, T1486)
+**Inicio:** 23/08/2026 22:13 UTC · **Cifrado:** 24/08/2026 00:57 UTC
+**Equipo afectado:** DESKTOP-60HVTTB (agente `Vuln-SOC`, 192.168.64.135)
+**Analista:** Braian Fernandez
+**Estado:** cerrado
+**Marcos de referencia:** ISO/IEC 27001:2022 (Anexo A), NIST SP 800-61, MITRE ATT&CK
 
-**Tipo de incidente:** Ransomware / Cifrado de datos
-
-**ID de incidente:** INC-2026-0824-001
-
-**Fecha de deteccion:** 24 de agosto de 2026 - 00:57 UTC
-
-**Analista responsable:** Braian Fernandez
-
-**Marco de gestión:** ISO/IEC 27001:2022
-
-**Marco operativo:** NIST SP 800-61 Rev. 2
-
-**Matriz de amenazas:** MITRE ATT&CK v14
-
-**Estado:** CERRADO - Recuperacion completa y verificada
+> **Alcance:** este reporte documenta un ejercicio de laboratorio aislado. No hay una organización real detrás: los roles (CISO, áreas de Finanzas y RRHH), los objetivos de recuperación y los plazos son supuestos para practicar el formato de un reporte de incidente. Todas las acciones técnicas se ejecutaron y las capturas están en `evidence/`.
 
 ---
 
-## 1. Resumen Ejecutivo
+## 1. Resumen
 
-El 24 de agosto de 2026, el sistema de monitoreo Wazuh SIEM detecto un incidente de
-ransomware en el endpoint DESKTOP-60HVTTB (agente Vuln-SOC, IP 192.168.64.135).
-El incidente fue identificado, contenido, erradicado y recuperado en su totalidad dentro
-del entorno de laboratorio controlado. No se vio comprometida infraestructura de produccion.
+Entre el 23/08 a las 22:13 y el 24/08 a las 00:57 UTC simulé en una VM con Windows 10 una cadena de ransomware: detención de un servicio (T1489), borrado de shadow copies y del catálogo de backup (T1490) y cifrado de seis archivos señuelo (T1486).
 
-La cadena de ataque comprende las tecnicas MITRE ATT&CK T1489, T1490 y T1486, siguiendo
-el patron clasico de ransomware moderno: destruccion de mecanismos de recuperacion, cifrado
-de datos (Fernet: AES-128-CBC + HMAC-SHA256) y extorsion via nota de rescate. La
-recuperacion total fue posible gracias a la disponibilidad de la clave de descifrado,
-que quedo almacenada en el mismo endpoint. Esto es una simplificacion del laboratorio:
-en un incidente real sin clave disponible, la recuperacion depende del backup offline
-(ver Gap 5).
+Wazuh generó alertas en cada paso, pero las dos primeras fases solo las vieron reglas genéricas de shell (92032 y 92052). El cifrado lo detectaron mis reglas 100200 y 100210 en menos de un segundo.
 
-Este reporte esta alineado a los controles de ISO/IEC 27001:2022, Anexo A, y sirve como
-evidencia de cumplimiento del proceso de gestion de incidentes de seguridad de la informacion.
+La respuesta del ejercicio empezó con el cifrado. En un caso real, las alertas de las 22:13 y las 22:58 eran la oportunidad de frenar el ataque antes de perder los backups.
+
+Recuperé los archivos con la clave que el simulador dejó en el mismo equipo. Sin esa clave, la recuperación habría dependido de un backup offline, que no tenía. Ordené el reporte según los controles del Anexo A de ISO/IEC 27001:2022.
 
 ---
 
-## 2. Mapeo ISO/IEC 27001:2022 — Controles Aplicables
+## 2. Controles ISO/IEC 27001:2022 que se ejercitaron
 
-### Controles del Anexo A activados por este incidente
-
-| Control ISO 27001:2022 | Descripcion | Estado en este incidente |
+| Control | Qué se vio en el lab | Estado |
 |---|---|---|
-| **A.5.24** | Planificacion y preparacion de la gestion de incidentes | Parcial — runbook existente, sin simulacros previos |
-| **A.5.25** | Evaluacion y decision sobre eventos de seguridad | Cumplido — alertas triadas y escaladas correctamente |
-| **A.5.26** | Respuesta a incidentes de seguridad de la informacion | Cumplido — contencion, erradicacion y recuperacion ejecutadas |
-| **A.5.27** | Aprendizaje de los incidentes de seguridad | Cumplido — gaps documentados y mejoras propuestas |
-| **A.5.28** | Recoleccion de evidencia | Cumplido — telemetria Sysmon + alertas Wazuh preservadas |
-| **A.5.29** | Seguridad de la informacion durante la interrupcion | Parcial — sin procedimientos formales de continuidad previos |
-| **A.5.30** | Preparacion de TIC para la continuidad del negocio | No cumplido — backups offline no configurados (gap critico) |
-| **A.6.8** | Notificacion de eventos de seguridad | Parcial — deteccion automatica, sin arbol de notificacion formal |
-| **A.8.7** | Proteccion contra malware | Parcial — Defender activo pero sin politica de scripting Python |
-| **A.8.8** | Gestion de vulnerabilidades tecnicas | Pendiente — revision de politica de ejecucion de scripts |
-| **A.8.13** | Copia de seguridad de la informacion | No cumplido — shadow copies eliminadas, sin backup offline |
-| **A.8.16** | Actividades de monitoreo | Cumplido — Sysmon + Wazuh activos con reglas custom |
-| **A.8.24** | Uso de criptografia | Gestionado — cifrado Fernet (AES-128-CBC + HMAC-SHA256) identificado y revertido |
+| A.5.24 Planificación y preparación de la gestión de incidentes | Hay un runbook, pero lo escribí después del incidente y no hubo simulacros previos | Parcial |
+| A.5.25 Evaluación y decisión sobre eventos | Confirmé las alertas a mano, sin proceso formal de triage | Parcial |
+| A.5.26 Respuesta a incidentes | Contención, erradicación y recuperación del equipo afectado | Cubierto en el lab |
+| A.5.27 Aprendizaje de los incidentes | Gaps documentados con acciones correctivas (sección 9) | Cubierto en el lab |
+| A.5.28 Recolección de evidencia | Telemetría de Sysmon, alertas de Wazuh y un snapshot del equipo | Cubierto en el lab |
+| A.5.29 Seguridad durante una interrupción | No hay procedimientos formales de continuidad | Parcial |
+| A.5.30 Preparación de las TIC para la continuidad | No hay backups offline | No cubierto |
+| A.6.8 Notificación de eventos | La detección fue automática, pero no hay un árbol de notificación formal | Parcial |
+| A.8.7 Protección contra malware | Defender estaba activo, pero sin política para scripts de Python | Parcial |
+| A.8.13 Copia de seguridad | Shadow copies y catálogo eliminados; sin backup offline | No cubierto |
+| A.8.15 Registro y A.8.16 Monitoreo | Sysmon y Wazuh activos con reglas propias, pero con gaps (EID 7036 sin recolectar, EID 23 deshabilitado) | Parcial |
 
 ---
 
-## 3. Gestion del Incidente — PDCA (ISO 27001)
+## 3. Gestión del incidente con el ciclo PDCA
 
-ISO/IEC 27001 utiliza el ciclo PDCA (Plan-Do-Check-Act) como base del SGSI.
-La respuesta a este incidente se refleja en ese ciclo:
+ISO 27001 suele explicarse con el ciclo PDCA (planificar, hacer, verificar, actuar). Lo uso para ordenar lo que hice en este incidente:
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                  CICLO PDCA — ISO 27001                          │
-│                                                                  │
-│   PLAN                         DO                                │
-│   ────────────────────         ──────────────────────            │
-│   • Runbook de respuesta   --> • Contencion del endpoint         │
-│   • Reglas de deteccion    --> • Eradicacion del proceso         │
-│   • Wazuh + Sysmon         --> • Recuperacion con decrypt        │
-│   • RTO/RPO definidos      --> • Comunicacion a stakeholders     │
-│          │                              │                        │
-│          ▼                              ▼                        │
-│   ACT                          CHECK                             │
-│   ────────────────────         ──────────────────────            │
-│   • Nuevas reglas custom   <-- • Revision de alertas Wazuh       │
-│   • Config Sysmon EID 23   <-- • Gaps de cobertura analizados    │
-│   • Backup offline         <-- • RTO vs MTTR comparados          │
-│   • Correlacion T1490+T1489<-- • Post-mortem del incidente       │
-└──────────────────────────────────────────────────────────────────┘
-```
+| Fase | Qué hice |
+|---|---|
+| Plan | Runbook de respuesta, reglas de detección, Wazuh + Sysmon, RTO y RPO definidos como supuestos |
+| Do | Contención del endpoint, erradicación del script, recuperación con el script de descifrado |
+| Check | Revisión de las alertas de Wazuh, análisis de los gaps de cobertura, comparación de RTO contra el tiempo real de recuperación |
+| Act | Reglas propias nuevas, config de Sysmon (EID 23), backup offline, correlación de T1489 y T1490, post-mortem |
+
+La comunicación a los interesados quedó definida (sección 8.3), pero no la ejercité.
 
 ---
 
-## 4. Framework de Respuesta — NIST SP 800-61 (Complementario)
+## 4. Respuesta según NIST SP 800-61
 
-### Fase 1 — Preparacion (ISO A.5.24)
+Uso las fases de NIST SP 800-61 como complemento de ISO para ordenar la respuesta.
+
+### Fase 1. Preparación (ISO A.5.24)
 
 | Elemento | Estado | Control ISO |
 |---|---|---|
-| SIEM (Wazuh) configurado | Activo | A.8.16 |
-| Agente Wazuh en endpoint | Activo | A.8.16 |
+| SIEM (Wazuh) | Activo | A.8.16 |
+| Agente de Wazuh en el endpoint | Activo | A.8.16 |
 | Sysmon con config personalizada | Activo | A.8.16 |
-| Reglas custom de deteccion (100020-100210) | Activas | A.5.25 |
-| Backups offline | No configurado | A.8.13 — GAP CRITICO |
-| Runbook de respuesta | Existente (este doc) | A.5.24 |
-| Politica de ejecucion de scripts | No definida | A.8.7 |
-| Arbol de notificacion formal | No definido | A.6.8 |
+| Reglas propias de detección (100020 a 100210) | Activas | A.5.25 |
+| Backups offline | No configurados (gap crítico) | A.8.13 |
+| Runbook de respuesta | Este documento, escrito después del incidente | A.5.24 |
+| Política de ejecución de scripts | No definida | A.8.7 |
+| Árbol de notificación formal | No definido | A.6.8 |
 
-### Fase 2 — Deteccion y Analisis (ISO A.5.25 / A.8.16)
+### Fase 2. Detección y análisis (ISO A.5.25 y A.8.16)
 
-- **Vector de deteccion:** Wazuh SIEM — reglas custom 100200 y 100210
-- **Tiempo hasta primera alerta:** Simultaneo al inicio del cifrado (< 1 segundo)
-- **Tecnicas identificadas:** T1489, T1490-1, T1490-3, T1486
-- **Herramientas de analisis:** Wazuh Dashboard, Sysmon EID 1/11/23
-- **Evidencia preservada:** Telemetria completa en indice wazuh-alerts-4.x-2026.08.23/24
+- **Primera alerta del incidente:** 23/08 22:13:38, por T1489 (regla genérica). La primera alerta de impacto fue a las 00:57:31 (regla 100200).
+- **Las dos fases previas pasaron como ejecución de shell.** Wazuh las clasificó como T1059.003 (Windows Command Shell), no como T1489 ni T1490.
+- **El cifrado sí quedó bien identificado.** Las reglas 100200 y 100210 generaron 13 alertas, sin demora.
+- **Técnicas identificadas:** T1489, T1490-1, T1490-3 y T1486.
+- **Herramientas:** Wazuh Dashboard y telemetría de Sysmon (EID 1, 11 y 23).
+- **Evidencia:** índice `wazuh-alerts-4.x-2026.08.23/24` y capturas en `evidence/`.
 
-### Fase 3 — Contencion, Erradicacion y Recuperacion (ISO A.5.26 / A.5.29)
+### Fase 3. Contención, erradicación y recuperación (ISO A.5.26 y A.5.29)
 
-| Sub-fase | Accion | Control ISO | Tiempo |
+| Etapa | Acción | Control ISO | Tiempo desde el cifrado |
 |---|---|---|---|
-| Contencion | Aislamiento de red del endpoint | A.5.26 | T+5 min |
-| Contencion | Snapshot forense preservado | A.5.28 | T+8 min |
-| Erradicacion | Proceso cifrador terminado | A.5.26 | T+12 min |
-| Erradicacion | Script documentado y removido | A.5.26 | T+20 min |
-| Recuperacion | Ejecucion de ransomware_decrypt.py | A.5.26 | T+2h 13min |
-| Recuperacion | 6 archivos restaurados | A.5.29 | T+2h 14min |
-| Verificacion | Integridad confirmada | A.5.26 | T+2h 20min |
+| Contención | Aislé el endpoint de la red | A.5.26 | 5 min |
+| Contención | Tomé un snapshot de la VM | A.5.28 | 8 min |
+| Erradicación | Verifiqué que no quedaba ningún proceso de cifrado activo | A.5.26 | 12 min |
+| Erradicación | Documenté el script cifrador y lo eliminé | A.5.26 | 20 min |
+| Recuperación | Ejecuté `ransomware_decrypt.py` | A.5.26 | 2 h 13 min |
+| Recuperación | Restauré los 6 archivos | A.5.29 | 2 h 14 min |
+| Verificación | Confirmé la integridad de los archivos | A.5.26 | 2 h 20 min |
 
-### Fase 4 — Actividad Post-Incidente (ISO A.5.27)
+### Fase 4. Actividad posterior al incidente (ISO A.5.27)
 
-- Reporte ejecutivo generado (este documento)
-- Gaps identificados y documentados con controles ISO asociados
-- Mejoras de deteccion implementadas (EID 11/23 en Sysmon, reglas 100200/100210)
-- Lecciones aprendidas incorporadas al SGSI
-- Plan de mejora continua propuesto (ver seccion 9)
+- Redacté este reporte.
+- Documenté los gaps con sus controles ISO.
+- Ya había agregado los EID 11 y 23 de Sysmon y las reglas 100200 y 100210 antes de correr el ataque, para poder detectar el cifrado. No son una mejora posterior.
+- Dejé las lecciones aprendidas en este reporte.
+- El plan de mejora está en la sección 9.
 
 ---
 
-## 5. Linea de Tiempo del Incidente
+## 5. Línea de tiempo (UTC)
 
-| Timestamp (UTC) | Fase NIST / ISO | Evento |
+| Hora | Fase | Evento |
 |---|---|---|
-| 23/08 22:13:38 | Deteccion / A.5.25 | T1489 - sc.exe stop spooler (Rules 92032/92052) |
-| 23/08 22:58:48 | Deteccion / A.5.25 | T1490 - vssadmin delete shadows detectado |
-| 23/08 23:05:09 | Deteccion / A.5.25 | T1490 - wbadmin delete catalog detectado |
-| 24/08 00:57:31 | Deteccion / A.5.25 | T1486 - Inicio del cifrado (python.exe) |
-| 24/08 00:57:31 | Deteccion / A.8.16 | Primera alerta T1486 - Rule 100200 (EID 11) |
-| 24/08 00:57:32 | Deteccion / A.8.16 | 13 alertas generadas (6xEID11 + 7xEID23) |
-| 24/08 01:02:00 | Contencion / A.5.26 | Endpoint aislado de la red |
-| 24/08 01:05:00 | Contencion / A.5.28 | Snapshot forense preservado |
-| 24/08 01:17:00 | Erradicacion / A.5.26 | Proceso cifrador terminado |
-| 24/08 03:10:00 | Recuperacion / A.5.29 | Ejecucion de ransomware_decrypt.py |
-| 24/08 03:11:00 | Recuperacion / A.5.29 | 6 archivos restaurados, notas eliminadas |
-| 24/08 03:30:00 | Post-Incidente / A.5.27 | Redaccion del reporte ejecutivo |
+| 23/08 22:13:38 | Detección | T1489: `sc.exe stop spooler` (reglas 92032/92052) |
+| 23/08 22:58:48 | Detección | T1490: `vssadmin delete shadows` |
+| 23/08 23:05:09 | Detección | T1490: `wbadmin delete catalog` |
+| 24/08 00:57:31 | Detección | T1486: empieza el cifrado; primera alerta, regla 100200 (EID 11) |
+| 24/08 00:57:32 | Detección | 13 alertas en total (6 de EID 11 y 7 de EID 23) |
+| 24/08 01:02 | Contención | Endpoint aislado de la red |
+| 24/08 01:05 | Contención | Snapshot de la VM |
+| 24/08 01:09 | Erradicación | Verificación de que no había procesos de cifrado activos |
+| 24/08 01:17 | Erradicación | Script cifrador documentado y eliminado |
+| 24/08 03:10 | Recuperación | Ejecución de `ransomware_decrypt.py` |
+| 24/08 03:11 | Recuperación | 6 archivos restaurados y notas de rescate eliminadas |
+| 24/08 03:17 | Verificación | Integridad de los archivos confirmada |
+| 24/08 03:30 | Post-incidente | Redacción de este reporte |
 
 ---
 
-## 6. Indicadores de Compromiso (IoCs)
+## 6. Indicadores de compromiso
 
-| Tipo | Valor | Tecnica MITRE | Control ISO |
-|---|---|---|---|
-| Proceso | python.exe (C:\Program Files\Python312\) | T1486 | A.8.7 |
-| Extension | .locked | T1486 | A.8.7 |
-| Archivo dropeado | README_RECOVER.txt | T1486 | A.5.25 |
-| Archivo | decrypt_key.key | T1486 | A.8.24 |
-| Comando | vssadmin.exe delete shadows /all /quiet | T1490 | A.8.13 |
-| Comando | wbadmin delete catalog -quiet | T1490 | A.8.13 |
-| Comando | sc.exe stop spooler | T1489 | A.5.26 |
-
-### Hashes de referencia (no son IoC)
-
-`vssadmin.exe` y `wbadmin.exe` son binarios legitimos de Windows (LOLBins). Su hash sirve
-para verificar que no fueron reemplazados, pero no identifica al atacante: el indicador es
-el uso del binario con argumentos destructivos (lineas de comando de la tabla anterior).
-
-| Binario | Hash | Uso |
+| Tipo | Valor | Técnica |
 |---|---|---|
-| vssadmin.exe | MD5 B58073DB8892B67A672906C9358020EC | Verificacion de integridad |
-| vssadmin.exe | SHA256 8C1FABCC2196E4D096B7D155837C5F699AD7F55EDBF84571E4F8E03500B7A8B0 | Verificacion de integridad |
-| wbadmin.exe | MD5 151FEEFF52D82BFB150B80F852DC7B50 | Verificacion de integridad |
-| wbadmin.exe | SHA256 94235BD6D75B2B11243F47D7EA2B5958433CCDE58368C2C9F1B14226E68867F6 | Verificacion de integridad |
+| Proceso | `python.exe` (`C:\Program Files\Python312\`) | T1486 |
+| Extensión | `.locked` | T1486 |
+| Archivo dejado | `README_RECOVER.txt` | T1486 |
+| Archivo | `decrypt_key.key` | T1486 |
+| Comando | `vssadmin.exe delete shadows /all /quiet` | T1490 |
+| Comando | `wbadmin delete catalog -quiet` | T1490 |
+| Comando | `sc.exe stop spooler` | T1489 |
+
+`vssadmin.exe` y `wbadmin.exe` son binarios legítimos de Windows, así que su hash no sirve como IoC. Los dejo como referencia para verificar su integridad:
+
+| Binario | Hash |
+|---|---|
+| vssadmin.exe | MD5 `B58073DB8892B67A672906C9358020EC` |
+| vssadmin.exe | SHA256 `8C1FABCC2196E4D096B7D155837C5F699AD7F55EDBF84571E4F8E03500B7A8B0` |
+| wbadmin.exe | MD5 `151FEEFF52D82BFB150B80F852DC7B50` |
+| wbadmin.exe | SHA256 `94235BD6D75B2B11243F47D7EA2B5958433CCDE58368C2C9F1B14226E68867F6` |
 
 ---
 
 ## 7. Impacto
 
-| Categoria | Detalle | Control ISO afectado |
-|---|---|---|
-| Archivos cifrados | 6 (.txt -> .txt.locked) | A.8.13 |
-| Carpetas afectadas | 3 (Finanzas, RRHH, Proyectos) | A.8.13 |
-| Shadow copies | Eliminadas (T1490-1) | A.8.13 |
-| Catalogo de backup | Eliminado (T1490-3) | A.8.13 |
-| Servicios detenidos | Print Spooler (T1489-1) | A.5.29 |
-| Sistemas afectados | 1 endpoint (DESKTOP-60HVTTB) | A.5.26 |
-| Datos exfiltrados | No detectado | A.5.28 |
-| Tiempo de recuperacion | 2 horas 14 minutos | A.5.30 |
-| Perdida de datos | 0 (recuperacion completa) | A.8.13 |
+| Categoría | Detalle |
+|---|---|
+| Archivos cifrados | 6 (`.txt` → `.txt.locked`), con Fernet (AES-128-CBC + HMAC-SHA256) |
+| Carpetas afectadas | 3 (Finanzas, RRHH, Proyectos), todas con archivos señuelo |
+| Shadow copies | Eliminadas (T1490-1) |
+| Catálogo de backup | Eliminado (T1490-3) |
+| Servicio detenido | Print Spooler (T1489-1) |
+| Equipos afectados | 1 (DESKTOP-60HVTTB) |
+| Datos exfiltrados | No detectado |
+| Tiempo de recuperación | 2 horas 14 minutos |
+| Pérdida de datos | 0, porque la clave estaba disponible |
 
 ---
 
-## 8. Plan de Continuidad del Negocio (BCM) — ISO A.5.29 / A.5.30
+## 8. Continuidad del negocio
 
-### 8.1 Objetivos de Recuperacion
+Esta sección es un ejercicio de formato: el lab no tiene áreas ni sistemas de negocio reales, así que los objetivos y los responsables son supuestos.
 
-| Metrica | Definicion | Valor objetivo | Valor real (este incidente) |
+### 8.1 Objetivos de recuperación
+
+| Métrica | Qué mide | Objetivo supuesto | Valor en este incidente |
 |---|---|---|---|
-| **RTO** | Tiempo maximo para restaurar operaciones | 4 horas | 2h 14min (cumplido) |
-| **RPO** | Maximo periodo de perdida de datos aceptable | 24 horas | 0 (clave disponible) |
-| **MTTR** | Tiempo real de recuperacion | <= RTO | 2h 14min |
+| RTO | Tiempo máximo para restaurar las operaciones | 4 horas | 2 h 14 min (cumplido) |
+| RPO | Máxima pérdida de datos aceptable | 24 horas | 0 (la clave estaba disponible) |
+| MTTR | Tiempo real de recuperación | Menor o igual al RTO | 2 h 14 min |
 
-### 8.2 Analisis de Impacto al Negocio (BIA) — ISO A.5.29
+### 8.2 Análisis de impacto (BIA)
 
-| Area / Sistema | Clasificacion ISO | Criticidad | Estado durante incidente | Control aplicado |
+| Área o sistema | Clasificación | Criticidad | Estado durante el incidente | Control |
 |---|---|---|---|---|
-| Documentos Finanzas | Confidencial | Alta | Cifrado (señuelo) | A.8.13 |
-| Documentos RRHH | Confidencial | Alta | Cifrado (señuelo) | A.8.13 |
-| Documentos Proyectos | Interno | Media | Cifrado (señuelo) | A.8.13 |
-| Wazuh SIEM | Critico | Maxima | Operativo | A.8.16 |
-| Agente de monitoreo | Critico | Maxima | Activo | A.8.16 |
-| Backups offline | Critico | Maxima | No configurados | A.8.13 — GAP |
+| Documentos de Finanzas | Confidencial | Alta | Cifrados (señuelo) | A.8.13 |
+| Documentos de RRHH | Confidencial | Alta | Cifrados (señuelo) | A.8.13 |
+| Documentos de Proyectos | Interno | Media | Cifrados (señuelo) | A.8.13 |
+| Wazuh SIEM | Crítico | Máxima | Operativo | A.8.16 |
+| Agente de monitoreo | Crítico | Máxima | Activo | A.8.16 |
+| Backups offline | Crítico | Máxima | No configurados (gap) | A.8.13 |
 
-### 8.3 Estrategia de Continuidad — ISO A.5.29 / A.5.30
+### 8.3 Estrategia de continuidad (ISO A.5.29 y A.5.30)
 
-#### Durante el aislamiento del endpoint:
+Mientras el endpoint estuvo aislado, esto es lo que se haría en una organización real:
 
-| Proceso afectado | Procedimiento alternativo | Responsable | Control ISO |
+| Proceso afectado | Procedimiento alternativo | Responsable | Control |
 |---|---|---|---|
-| Acceso a documentos Finanzas | Procedimiento manual + escalado a IT para evaluacion de recovery | Area Finanzas | A.5.29 |
-| Acceso a documentos RRHH | Procedimiento manual + uso de copias de trabajo locales | Area RRHH | A.5.29 |
-| Operaciones del endpoint | Reasignacion temporal | IT | A.5.29 |
-| Comunicacion interna | Canal alternativo fuera del dominio | TI | A.5.29 |
-| Notificacion stakeholders | Dentro de los 30 min de confirmacion | CISO | A.6.8 |
+| Acceso a documentos de Finanzas | Trabajo manual y escalado a IT para evaluar la recuperación | Finanzas | A.5.29 |
+| Acceso a documentos de RRHH | Trabajo manual con copias locales | RRHH | A.5.29 |
+| Operaciones del endpoint | Reasignación temporal | IT | A.5.29 |
+| Comunicación interna | Canal alternativo fuera del dominio | IT | A.5.29 |
+| Aviso a los interesados | Dentro de los 30 minutos de confirmado el incidente | CISO | A.6.8 |
 
-#### Arbol de comunicacion (ISO A.6.8):
+Árbol de comunicación (ISO A.6.8):
 
 ```
-T+0  --> Deteccion automatica (Wazuh SIEM)
-T+5  --> Analista SOC confirma y escala al equipo de respuesta
-T+15 --> Notificacion al CISO / Responsable de Seguridad
-T+30 --> Comunicacion inicial a Gerencia (ISO A.6.8)
-T+60 --> Evaluacion de alcance y decision de recuperacion
-T+2h --> Actualizacion de estado a stakeholders
-T+Xh --> Declaracion de incidente cerrado (ISO A.5.27)
+T+0   Detección automática (Wazuh SIEM)
+T+5   El analista SOC confirma y escala al equipo de respuesta
+T+15  Aviso al CISO o responsable de seguridad
+T+30  Primer aviso a la gerencia
+T+60  Evaluación del alcance y decisión de recuperación
+T+2h  Actualización de estado a los interesados
+T+Xh  Cierre del incidente (ISO A.5.27)
 ```
 
-### 8.4 Plan de Prueba del BCM — ISO A.5.30
+### 8.4 Pruebas del plan de continuidad (ISO A.5.30)
 
-| Actividad | Frecuencia | Responsable | Control ISO |
+| Actividad | Frecuencia | Responsable | Control |
 |---|---|---|---|
-| Simulacro de ransomware (tabletop exercise) | Anual | CISO + SOC | A.5.24 |
-| Prueba de restore desde backup offline | Trimestral | IT / SysAdmin | A.8.13 |
-| Revision del runbook de respuesta | Semestral | Analista SOC Senior | A.5.24 |
-| Actualizacion de reglas de deteccion | Post-incidente + Trimestral | Analista SOC | A.8.16 |
-| Verificacion de RTO/RPO vs operaciones reales | Semestral | CISO + Negocio | A.5.30 |
-| Auditoria interna de controles ISO 27001 | Anual | Auditor interno | ISO 9.2 |
+| Simulacro de ransomware (tabletop) | Anual | CISO y SOC | A.5.24 |
+| Prueba de restauración desde backup offline | Trimestral | IT / SysAdmin | A.8.13 |
+| Revisión del runbook de respuesta | Semestral | Analista SOC senior | A.5.24 |
+| Actualización de reglas de detección | Después de cada incidente y trimestral | Analista SOC | A.8.16 |
+| Verificación de RTO y RPO contra operaciones reales | Semestral | CISO y negocio | A.5.30 |
+| Auditoría interna de controles ISO 27001 | Anual | Auditor interno | Cláusula 9.2 |
 
 ---
 
-## 9. Hallazgos, Gaps y Plan de Mejora Continua — ISO/IEC 27001 cláusula 10.2
+## 9. Gaps y plan de mejora (ISO/IEC 27001, cláusula 10.2)
 
-### Gap 1 — EID 7036 no recolectado (A.8.16)
-**Descripcion:** Canal System no configurado en ossec.conf. El estado real del servicio
-detenido (T1489) no llego al SIEM.
-**Control afectado:** A.8.16 Actividades de monitoreo
-**Accion correctiva:** Agregar canal System al agente Wazuh
-**Prioridad:** Alta | **Responsable:** Analista SOC | **Plazo:** 7 dias
+### Gap 1. EID 7036 sin recolectar (A.8.16)
+El canal `System` no está configurado en `ossec.conf`, así que el servicio detenido (T1489) no llegó al SIEM.
+**Acción:** agregar el canal `System` al agente de Wazuh.
+**Prioridad:** alta · **Responsable:** analista SOC · **Plazo:** 7 días
 
-### Gap 2 — Deteccion generica para T1489/T1490 (A.5.25)
-**Descripcion:** Las tres tecnicas dispararon T1059.003 en vez de T1489/T1490.
-El SIEM no identifico la preparacion de ransomware.
-**Control afectado:** A.5.25 Evaluacion de eventos de seguridad
-**Accion correctiva:** Reglas custom para vssadmin/wbadmin/sc.exe con args destructivos
-**Prioridad:** Alta | **Responsable:** Analista SOC | **Plazo:** 14 dias
+### Gap 2. Detección genérica para T1489 y T1490 (A.5.25)
+Las tres técnicas se clasificaron como T1059.003 y no como T1489 o T1490. El SIEM no identificó la preparación del ransomware.
+**Acción:** reglas propias para `vssadmin`, `wbadmin` y `sc.exe` con argumentos destructivos.
+**Prioridad:** alta · **Responsable:** analista SOC · **Plazo:** 14 días
 
-### Gap 3 — EID 23 deshabilitado en Sysmon (A.8.16)
-**Descripcion:** FileDelete completamente comentado en config base SwiftOnSecurity.
-Requirio intervencion manual para habilitarlo.
-**Control afectado:** A.8.16 Actividades de monitoreo
-**Accion correctiva:** Revisar activamente la config de Sysmon para casos de uso especificos
-**Prioridad:** Media | **Responsable:** Analista SOC | **Plazo:** 14 dias
+### Gap 3. EID 23 deshabilitado en Sysmon (A.8.16)
+FileDelete estaba comentado en la config base de SwiftOnSecurity y tuve que habilitarlo a mano.
+**Acción:** revisar la config de Sysmon según cada caso de uso.
+**Prioridad:** media · **Responsable:** analista SOC · **Plazo:** 14 días
 
-### Gap 4 — Sin correlacion pre-ataque T1489+T1490 (A.5.25)
-**Descripcion:** T1489 y T1490 ocurrieron 2+ horas antes del cifrado sin generar
-una alerta combinada de "preparacion de ransomware en curso".
-**Control afectado:** A.5.25 Evaluacion y decision sobre eventos
-**Accion correctiva:** Regla de correlacion: T1489 + T1490 < 60 min = alerta nivel 14
-**Prioridad:** Alta | **Responsable:** Analista SOC | **Plazo:** 30 dias
+### Gap 4. Sin correlación previa al ataque (A.5.25)
+T1489 y T1490 ocurrieron más de dos horas antes del cifrado y no generaron una alerta combinada de "preparación de ransomware".
+**Acción:** regla de correlación: T1489 y T1490 en menos de 60 minutos generan una alerta de nivel 14.
+**Prioridad:** alta · **Responsable:** analista SOC · **Plazo:** 30 días
 
-### Gap 5 — Backup offline ausente (A.8.13)
-**Descripcion:** La eliminacion exitosa de shadow copies deja al sistema sin recuperacion
-nativa. La recuperacion dependio de la clave en manos del "atacante". En un escenario real
-sin clave disponible, la perdida de datos seria total.
-**Control afectado:** A.8.13 Copia de seguridad de la informacion
-**Accion correctiva:** Implementar backup offline (air-gapped) con RPO de 4 horas
-**Prioridad:** Critica | **Responsable:** IT / SysAdmin | **Plazo:** Inmediato
+### Gap 5. Sin backup offline (A.8.13)
+Con las shadow copies borradas, el sistema se quedó sin recuperación nativa. Recuperé gracias a la clave en manos del "atacante". Sin ella, la pérdida de datos habría sido total.
+**Acción:** backup offline (air-gapped) con un RPO de 4 horas.
+**Prioridad:** crítica · **Responsable:** IT / SysAdmin · **Plazo:** inmediato
 
-### Gap 6 — Sin politica de scripting Python en endpoints (A.8.7)
-**Descripcion:** python.exe pudo ejecutarse sin restricciones en el endpoint.
-**Control afectado:** A.8.7 Proteccion contra malware
-**Accion correctiva:** Revisar politica de ejecucion de aplicaciones / Application Whitelisting
-**Prioridad:** Media | **Responsable:** IT | **Plazo:** 30 dias
+### Gap 6. Sin política para scripts de Python (A.8.7)
+`python.exe` se ejecutó sin restricciones en el endpoint.
+**Acción:** revisar la política de ejecución de aplicaciones o aplicar allowlisting.
+**Prioridad:** media · **Responsable:** IT · **Plazo:** 30 días
 
-### Gap 7 — Sin arbol de notificacion formal (A.6.8)
-**Descripcion:** No existe un procedimiento documentado de escalado y notificacion
-para incidentes de seguridad.
-**Control afectado:** A.6.8 Notificacion de eventos de seguridad
-**Accion correctiva:** Definir arbol de comunicacion y plantilla de notificacion
-**Prioridad:** Media | **Responsable:** CISO | **Plazo:** 30 dias
+### Gap 7. Sin árbol de notificación formal (A.6.8)
+No existe un procedimiento escrito de escalado y notificación para incidentes de seguridad.
+**Acción:** definir el árbol de comunicación y una plantilla de aviso.
+**Prioridad:** media · **Responsable:** CISO · **Plazo:** 30 días
 
 ---
 
-## 10. Recomendaciones — Priorizadas por Control ISO
+## 10. Recomendaciones priorizadas
 
-| Prioridad | Control ISO | Recomendacion |
+| Prioridad | Control | Recomendación |
 |---|---|---|
-| Critica | A.8.13 | Backup offline (air-gapped) con RPO de 4 horas |
-| Alta | A.5.25 | Reglas custom para T1489/T1490 con mapeo correcto |
-| Alta | A.8.16 | Canal System en agente Wazuh (EID 7036) |
-| Alta | A.5.25 | Regla de correlacion temporal T1489+T1490 pre-alerta |
-| Media | A.8.16 | Agregar python.exe al monitoreo EID 1 en Sysmon |
-| Media | A.5.30 | Formalizar RTO/RPO por sistema antes del proximo ejercicio |
-| Media | A.5.24 | Programar simulacro tabletop anual de ransomware |
-| Media | A.6.8 | Definir arbol de comunicacion y escalado formal |
-| Baja | A.8.7 | Revisar politica de ejecucion de scripts en endpoints |
-| Baja | A.8.8 | Revision periodica de vulnerabilidades tecnicas |
+| Crítica | A.8.13 | Backup offline (air-gapped) con RPO de 4 horas |
+| Alta | A.5.25 | Reglas propias para T1489 y T1490 |
+| Alta | A.8.16 | Canal `System` en el agente de Wazuh (EID 7036) |
+| Alta | A.5.25 | Regla de correlación de T1489 y T1490 como pre-alerta |
+| Media | A.8.16 | Agregar `python.exe` al monitoreo de EID 1 en Sysmon |
+| Media | A.5.30 | Formalizar RTO y RPO por sistema antes del próximo ejercicio |
+| Media | A.5.24 | Programar un simulacro tabletop anual de ransomware |
+| Media | A.6.8 | Definir el árbol de comunicación y de escalado |
+| Baja | A.8.7 | Revisar la política de ejecución de scripts en los endpoints |
+| Baja | A.8.8 | Revisar periódicamente las vulnerabilidades técnicas |
 
 ---
 
-## 11. Mapeo de referencia a controles ISO/IEC 27001:2022
+## 11. Referencias a ISO/IEC 27001:2022
 
-Este reporte ha sido elaborado siguiendo los requisitos de las clausulas 6.1.2, 8.2, 9.1
-y 10.2 de ISO/IEC 27001:2022, y los controles del Anexo A referenciados en cada seccion.
+Estas son las cláusulas y los controles que usé como guía, y dónde aparecen en el reporte:
 
-| Clausula ISO 27001 | Descripcion | Evidencia en este reporte |
+| Referencia | Descripción | Dónde se refleja |
 |---|---|---|
-| 6.1.2 | Evaluacion de riesgos de seguridad | BIA, tabla de impacto (seccion 8.2) |
-| 8.2 | Evaluacion de riesgos de la informacion | Gaps y plan de mejora (seccion 9) |
-| 9.1 | Seguimiento, medicion, analisis y evaluacion | RTO/RPO/MTTR (seccion 8.1) |
-| 10.2 | Mejora continua | Plan de accion post-incidente (seccion 9) |
-| Anexo A.5.24-5.30 | Gestion de incidentes de seguridad | Secciones 4, 5, 8 |
-| Anexo A.6.8 | Notificacion de eventos | Arbol de comunicacion (seccion 8.3) |
-| Anexo A.8.7 | Proteccion contra malware | Gap 6 (seccion 9) |
-| Anexo A.8.13 | Copia de seguridad | Gap critico 5 (seccion 9) |
-| Anexo A.8.16 | Actividades de monitoreo | Deteccion Wazuh/Sysmon (secciones 4, 5) |
+| Cláusula 6.1.2 | Evaluación de riesgos | BIA y tabla de impacto (secciones 7 y 8.2) |
+| Cláusula 8.2 | Evaluación de riesgos de la información | Gaps y plan de mejora (sección 9) |
+| Cláusula 9.1 | Seguimiento y medición | RTO, RPO y MTTR (sección 8.1) |
+| Cláusula 10.2 | Mejora continua | Acciones correctivas (sección 9) |
+| Anexo A, A.5.24 a A.5.30 | Gestión de incidentes y continuidad | Secciones 4, 5 y 8 |
+| Anexo A, A.6.8 | Notificación de eventos | Árbol de comunicación (sección 8.3) |
+| Anexo A, A.8.7 | Protección contra malware | Gap 6 (sección 9) |
+| Anexo A, A.8.13 | Copia de seguridad | Gap 5 (sección 9) |
+| Anexo A, A.8.16 | Monitoreo | Detección con Wazuh y Sysmon (secciones 4 y 5) |
 
 ---
 
-## 12. Firmas y Aprobacion
+## 12. Limitaciones del ejercicio
+
+- La clave quedó en el mismo equipo, algo que un atacante real no haría. Eso hizo trivial la recuperación.
+- Mis reglas 100200 y 100210 dependen de la extensión `.locked` y de `python.exe`. Detectan este simulador, no una familia real.
+- No simulé persistencia, movimiento lateral ni exfiltración, y hubo un solo endpoint.
+- No ejercité la notificación a terceros ni la continuidad del negocio: la sección 8 muestra el formato, no algo que haya ocurrido.
+
+---
+
+## 13. Firmas y aprobación
 
 | Rol | Nombre | Fecha | Firma |
 |---|---|---|---|
-| Analista SOC (Autor) | Braian Fernandez | 24/08/2026 | |
-| Revisor de Seguridad (ISO 27001) | | | |
-| CISO / Aprobador | | | |
+| Analista SOC (autor) | Braian Fernandez | 24/08/2026 | |
+| Revisor de seguridad | | | |
+| CISO / aprobador | | | |
 | Responsable del SGSI | | | |
 
 ---
 
-**Clasificacion del documento:** CONFIDENCIAL - USO INTERNO
-**Proximo ciclo de revision:** 90 dias post-cierre o ante nuevo incidente similar
-**Marcos normativos:** ISO/IEC 27001:2022 | NIST SP 800-61 Rev. 2 | MITRE ATT&CK v14
-**Version:** 1.0
+**Tipo de documento:** reporte de laboratorio (público)
+**Próxima revisión:** a los 90 días del cierre o ante un incidente similar
+**Marcos:** ISO/IEC 27001:2022 · NIST SP 800-61 · MITRE ATT&CK
+**Versión:** 1.0
