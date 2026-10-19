@@ -204,7 +204,7 @@ algoritmo AES-256. Sin la clave de descifrado en nuestro
 poder, no podras recuperarlos.
 
 Para recuperar tus archivos contacta a:
-  recovery@[redacted].onion
+  recovery@lab-sector7.onion
 
 Identificador unico de victima: SIM-LAB-2026
 
