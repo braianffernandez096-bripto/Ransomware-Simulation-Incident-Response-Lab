@@ -100,7 +100,7 @@
     <if_group>sysmon</if_group>
     <field name="win.system.eventID">^11$</field>
     <field name="win.eventdata.targetFilename" type="pcre2">\.locked$</field>
-    <description>T1486 - Ransomware: archivo cifrado creado (.locked) por python.exe</description>
+    <description>T1486 - Ransomware: archivo con extension .locked creado (Sysmon EID 11)</description>
     <mitre><id>T1486</id></mitre>
     <group>ransomware,t1486,sysmon_eid11,windows</group>
   </rule>
@@ -112,6 +112,48 @@
     <description>T1486 - Ransomware: archivo original eliminado tras cifrado por python.exe</description>
     <mitre><id>T1486</id></mitre>
     <group>ransomware,t1486,sysmon_eid23,windows</group>
+  </rule>
+
+  <!-- Deteccion por comportamiento: rafaga de borrados del mismo proceso.
+       No depende de la extension ni del nombre del proceso, pero hereda el
+       alcance del Sysmon (en el lab solo se registran borrados de python.exe). -->
+  <rule id="100240" level="14" frequency="5" timeframe="10">
+    <if_matched_sid>100210</if_matched_sid>
+    <same_field>win.eventdata.image</same_field>
+    <description>T1486 - Ransomware: rafaga de borrados de archivos por el mismo proceso (5 en 10 s)</description>
+    <mitre><id>T1486</id></mitre>
+    <group>ransomware,t1486,behavior,windows</group>
+  </rule>
+
+  <!-- T1489 / T1490 - Preparacion de ransomware (inhibir recuperacion) -->
+
+  <rule id="100220" level="14">
+    <if_group>sysmon_eid1_detections</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)vssadmin\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)delete\s+shadows</field>
+    <description>T1490 - Eliminacion de Volume Shadow Copies via vssadmin</description>
+    <mitre><id>T1490</id></mitre>
+    <group>ransomware,t1490,inhibit-recovery,windows</group>
+  </rule>
+
+  <rule id="100221" level="14">
+    <if_group>sysmon_eid1_detections</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)wbadmin\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)delete\s+(catalog|backup|systemstatebackup)</field>
+    <description>T1490 - Eliminacion de catalogo o backups de Windows via wbadmin</description>
+    <mitre><id>T1490</id></mitre>
+    <group>ransomware,t1490,inhibit-recovery,windows</group>
+  </rule>
+
+  <!-- Nivel 10: detener servicios es comun en administracion legitima.
+       Se acota a servicios criticos o de backup (spooler incluido por Atomic T1489-1). -->
+  <rule id="100222" level="10">
+    <if_group>sysmon_eid1_detections</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\sc\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)\sstop\s+"?(spooler|vss|swprv|wbengine|mssql\w*|sql\w*|veeam\w*|backup\w*)</field>
+    <description>T1489 - Detencion de servicio critico o de backup via sc.exe</description>
+    <mitre><id>T1489</id></mitre>
+    <group>ransomware,t1489,windows</group>
   </rule>
 
 </group>

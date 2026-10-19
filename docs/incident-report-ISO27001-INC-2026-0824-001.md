@@ -30,8 +30,11 @@ del entorno de laboratorio controlado. No se vio comprometida infraestructura de
 
 La cadena de ataque comprende las tecnicas MITRE ATT&CK T1489, T1490 y T1486, siguiendo
 el patron clasico de ransomware moderno: destruccion de mecanismos de recuperacion, cifrado
-de datos con AES-256 y extorsion via nota de rescate. La recuperacion total fue posible
-gracias a la disponibilidad de la clave de descifrado retenida en el entorno controlado.
+de datos (Fernet: AES-128-CBC + HMAC-SHA256) y extorsion via nota de rescate. La
+recuperacion total fue posible gracias a la disponibilidad de la clave de descifrado,
+que quedo almacenada en el mismo endpoint. Esto es una simplificacion del laboratorio:
+en un incidente real sin clave disponible, la recuperacion depende del backup offline
+(ver Gap 5).
 
 Este reporte esta alineado a los controles de ISO/IEC 27001:2022, Anexo A, y sirve como
 evidencia de cumplimiento del proceso de gestion de incidentes de seguridad de la informacion.
@@ -56,7 +59,7 @@ evidencia de cumplimiento del proceso de gestion de incidentes de seguridad de l
 | **A.8.8** | Gestion de vulnerabilidades tecnicas | Pendiente — revision de politica de ejecucion de scripts |
 | **A.8.13** | Copia de seguridad de la informacion | No cumplido — shadow copies eliminadas, sin backup offline |
 | **A.8.16** | Actividades de monitoreo | Cumplido — Sysmon + Wazuh activos con reglas custom |
-| **A.8.24** | Uso de criptografia | Gestionado — cifrado AES-256 identificado y revertido |
+| **A.8.24** | Uso de criptografia | Gestionado — cifrado Fernet (AES-128-CBC + HMAC-SHA256) identificado y revertido |
 
 ---
 
@@ -163,10 +166,19 @@ La respuesta a este incidente se refleja en ese ciclo:
 | Comando | vssadmin.exe delete shadows /all /quiet | T1490 | A.8.13 |
 | Comando | wbadmin delete catalog -quiet | T1490 | A.8.13 |
 | Comando | sc.exe stop spooler | T1489 | A.5.26 |
-| Hash MD5 | B58073DB8892B67A672906C9358020EC (vssadmin.exe) | T1490 | A.5.28 |
-| Hash SHA256 | 8C1FABCC2196E4D096B7D155837C5F699AD7F55EDBF84571E4F8E03500B7A8B0 | T1490 | A.5.28 |
-| Hash MD5 | 151FEEFF52D82BFB150B80F852DC7B50 (wbadmin.exe) | T1490 | A.5.28 |
-| Hash SHA256 | 94235BD6D75B2B11243F47D7EA2B5958433CCDE58368C2C9F1B14226E68867F6 | T1490 | A.5.28 |
+
+### Hashes de referencia (no son IoC)
+
+`vssadmin.exe` y `wbadmin.exe` son binarios legitimos de Windows (LOLBins). Su hash sirve
+para verificar que no fueron reemplazados, pero no identifica al atacante: el indicador es
+el uso del binario con argumentos destructivos (lineas de comando de la tabla anterior).
+
+| Binario | Hash | Uso |
+|---|---|---|
+| vssadmin.exe | MD5 B58073DB8892B67A672906C9358020EC | Verificacion de integridad |
+| vssadmin.exe | SHA256 8C1FABCC2196E4D096B7D155837C5F699AD7F55EDBF84571E4F8E03500B7A8B0 | Verificacion de integridad |
+| wbadmin.exe | MD5 151FEEFF52D82BFB150B80F852DC7B50 | Verificacion de integridad |
+| wbadmin.exe | SHA256 94235BD6D75B2B11243F47D7EA2B5958433CCDE58368C2C9F1B14226E68867F6 | Verificacion de integridad |
 
 ---
 
@@ -244,7 +256,7 @@ T+Xh --> Declaracion de incidente cerrado (ISO A.5.27)
 
 ---
 
-## 9. Hallazgos, Gaps y Plan de Mejora Continua — ISO A.10.2
+## 9. Hallazgos, Gaps y Plan de Mejora Continua — ISO/IEC 27001 cláusula 10.2
 
 ### Gap 1 — EID 7036 no recolectado (A.8.16)
 **Descripcion:** Canal System no configurado en ossec.conf. El estado real del servicio
